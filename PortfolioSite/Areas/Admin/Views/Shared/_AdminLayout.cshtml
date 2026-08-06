@@ -1,0 +1,129 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Microsoft.AspNetCore.Identity.IdentityUser> SignInManager
+@inject PortfolioSite.Interfaces.IPortfolioService PortfolioService
+@{
+    var profile = await PortfolioService.GetProfileAsync();
+    var fullName = profile?.FullName ?? "John Doe";
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>@(ViewData["Title"] != null ? ViewData["Title"] + " — " : "")Admin Panel | @fullName</title>
+    <link rel="stylesheet" href="/css/admin.css" asp-append-version="true" />
+</head>
+<body>
+
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;" onclick="document.querySelector('.admin-sidebar').classList.remove('open');this.style.display='none';"></div>
+
+<div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" role="navigation" aria-label="Admin menü">
+        <div class="sidebar-header">
+            <div>
+                <div class="sidebar-logo">@fullName</div>
+                <div class="sidebar-subtitle">Portföy Yönetim Paneli</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Genel</div>
+                <a href="/Admin/Dashboard" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                    Dashboard
+                </a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">İçerik Yönetimi</div>
+                <a href="/Admin/Profile" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                    Profil
+                </a>
+                <a href="/Admin/Experiences" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    Deneyimler
+                </a>
+                <a href="/Admin/Skills" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    Yetenekler
+                </a>
+                <a href="/Admin/Projects" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                    Projeler
+                </a>
+                <a href="/Admin/Certificates" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                    Sertifikalar
+                </a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Yönetim</div>
+                <a href="/Admin/Messages" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    Mesajlar
+                </a>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="/" target="_blank" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+                Siteyi Gör
+            </a>
+            <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="nav-item" style="width:100%;border:none;cursor:pointer;background:transparent;color:var(--admin-text-secondary);font-size:0.875rem;font-family:inherit;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                    Çıkış Yap
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <div class="topbar-left">
+                <button class="admin-hamburger" aria-label="Menüyü aç">
+                    <span></span><span></span><span></span>
+                </button>
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <a href="/Admin/Dashboard">Dashboard</a>
+                    @if (ViewData["Title"] != null) {
+                        <span class="breadcrumb-sep">/</span>
+                        <span class="breadcrumb-current">@ViewData["Title"]</span>
+                    }
+                </nav>
+            </div>
+            <div class="topbar-right">
+                <a href="/" target="_blank" class="topbar-btn topbar-btn-outline">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+                    Siteyi Gör
+                </a>
+            </div>
+        </header>
+
+        <main class="admin-content">
+            @if (TempData["Success"] != null) {
+                <div class="alert alert-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Error"] != null) {
+                <div class="alert alert-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg>
+                    @TempData["Error"]
+                </div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/admin.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

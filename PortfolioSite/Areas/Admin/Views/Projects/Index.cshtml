@@ -1,0 +1,36 @@
+@model List<PortfolioSite.Entities.Project>
+@{
+    ViewData["Title"] = "Projeler";
+}
+<div class="page-header">
+    <div><h1 class="page-title">Projeler</h1><p class="page-subtitle">@Model.Count proje</p></div>
+    <a href="/Admin/Projects/Create" class="btn-admin btn-admin-primary">+ Yeni Proje</a>
+</div>
+<div class="admin-card">
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead><tr><th>Proje Adı</th><th>Durum</th><th>Öne Çıkan</th><th>Aktif</th><th>İşlemler</th></tr></thead>
+            <tbody>
+                @if (!Model.Any()) {
+                    <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--admin-text-muted);">Henüz proje eklenmemiş</td></tr>
+                }
+                @foreach (var p in Model) {
+                    <tr>
+                        <td style="font-weight:600;">@p.Name</td>
+                        <td><span class="badge-admin @(p.Status == PortfolioSite.Entities.ProjectStatus.Tamamlandı ? "badge-active" : "badge-inactive")">@p.Status</span></td>
+                        <td>@(p.IsFeatured ? "⭐ Evet" : "—")</td>
+                        <td><span class="badge-admin @(p.IsActive ? "badge-active" : "badge-inactive")">@(p.IsActive ? "Aktif" : "Pasif")</span></td>
+                        <td style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                            <a href="/Admin/Projects/Edit/@p.Id" class="btn-admin btn-admin-secondary btn-admin-sm">Düzenle</a>
+                            <form asp-area="Admin" asp-controller="Projects" asp-action="Delete" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@p.Id" />
+                                <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm" data-confirm-delete="@p.Name projesini silmek istediğinizden emin misiniz?">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

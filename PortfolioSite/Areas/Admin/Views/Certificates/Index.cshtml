@@ -1,0 +1,34 @@
+@model List<PortfolioSite.Entities.Certificate>
+@{
+    ViewData["Title"] = "Sertifikalar";
+}
+<div class="page-header">
+    <div><h1 class="page-title">Sertifikalar</h1></div>
+    <a href="/Admin/Certificates/Create" class="btn-admin btn-admin-primary">+ Sertifika Ekle</a>
+</div>
+<div class="admin-card">
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead><tr><th>Sertifika Adı</th><th>Kurum</th><th>Tarih</th><th>Aktif</th><th>İşlem</th></tr></thead>
+            <tbody>
+                @if (!Model.Any()) { <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--admin-text-muted);">Sertifika yok</td></tr> }
+                @foreach (var c in Model) {
+                    <tr>
+                        <td style="font-weight:600;">@c.Name</td>
+                        <td>@(c.IssuingOrganization ?? "—")</td>
+                        <td>@c.IssuedDate.ToString("MMM yyyy")</td>
+                        <td><span class="badge-admin @(c.IsActive ? "badge-active" : "badge-inactive")">@(c.IsActive ? "Aktif" : "Pasif")</span></td>
+                        <td style="display:flex;gap:0.5rem;">
+                            <a href="/Admin/Certificates/Edit/@c.Id" class="btn-admin btn-admin-secondary btn-admin-sm">Düzenle</a>
+                            <form asp-area="Admin" asp-controller="Certificates" asp-action="Delete" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@c.Id" />
+                                <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm" data-confirm-delete="Silmek istediğinizden emin misiniz?">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

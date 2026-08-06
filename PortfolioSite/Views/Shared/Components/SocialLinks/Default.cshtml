@@ -1,0 +1,9 @@
+@using PortfolioSite.Entities
+@model List<SocialLink>
+@foreach (var link in Model) {
+    <li>
+        <a href="@link.Url" @(link.OpenInNewTab ? "target=\"_blank\" rel=\"noopener noreferrer\"" : "")>
+            @link.DisplayName ↗
+        </a>
+    </li>
+}

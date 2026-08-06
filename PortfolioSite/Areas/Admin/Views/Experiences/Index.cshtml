@@ -1,0 +1,34 @@
+@model List<PortfolioSite.Entities.Experience>
+@{
+    ViewData["Title"] = "Deneyimler";
+}
+<div class="page-header">
+    <div><h1 class="page-title">Deneyimler</h1></div>
+    <a href="/Admin/Experiences/Create" class="btn-admin btn-admin-primary">+ Deneyim Ekle</a>
+</div>
+<div class="admin-card">
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead><tr><th>Pozisyon</th><th>Şirket</th><th>Tarih</th><th>Aktif</th><th>İşlem</th></tr></thead>
+            <tbody>
+                @if (!Model.Any()) { <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--admin-text-muted);">Deneyim yok</td></tr> }
+                @foreach (var e in Model) {
+                    <tr>
+                        <td style="font-weight:600;">@e.Position</td>
+                        <td>@(e.HideCompanyName ? "(Gizli)" : e.Company ?? "—")</td>
+                        <td>@e.StartDate.ToString("MMM yyyy") - @(e.IsCurrentJob ? "Güncel" : e.EndDate?.ToString("MMM yyyy") ?? "")</td>
+                        <td><span class="badge-admin @(e.IsActive ? "badge-active" : "badge-inactive")">@(e.IsActive ? "Aktif" : "Pasif")</span></td>
+                        <td style="display:flex;gap:0.5rem;">
+                            <a href="/Admin/Experiences/Edit/@e.Id" class="btn-admin btn-admin-secondary btn-admin-sm">Düzenle</a>
+                            <form asp-area="Admin" asp-controller="Experiences" asp-action="Delete" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@e.Id" />
+                                <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm" data-confirm-delete="Silmek istediğinizden emin misiniz?">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

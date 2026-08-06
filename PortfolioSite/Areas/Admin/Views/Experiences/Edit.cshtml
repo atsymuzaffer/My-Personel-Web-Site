@@ -1,0 +1,33 @@
+@model PortfolioSite.Entities.Experience
+@{
+    ViewData["Title"] = "Deneyim Düzenle";
+}
+<div class="page-header">
+    <div><h1 class="page-title">Deneyim Düzenle</h1></div>
+    <a href="/Admin/Experiences" class="btn-admin btn-admin-secondary">← Geri</a>
+</div>
+<div class="admin-card"><div class="admin-card-body">
+    <form asp-area="Admin" asp-controller="Experiences" asp-action="Edit" method="post" class="admin-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <div class="form-grid-2">
+            <div class="form-group"><label class="form-label">Pozisyon *</label><input asp-for="Position" class="form-control" required /></div>
+            <div class="form-group"><label class="form-label">Şirket</label><input asp-for="Company" class="form-control" /></div>
+        </div>
+        <div class="form-grid-2">
+            <div class="form-group"><label class="form-label">Başlangıç Tarihi *</label><input asp-for="StartDate" class="form-control" type="date" required /></div>
+            <div class="form-group"><label class="form-label">Bitiş Tarihi</label><input asp-for="EndDate" class="form-control" type="date" /></div>
+        </div>
+        <div style="display:flex;gap:1.5rem;margin-bottom:1rem;">
+            <div class="form-check"><input asp-for="IsCurrentJob" class="form-check-input" id="current" /><label for="current" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Halen çalışıyorum</label></div>
+            <div class="form-check"><input asp-for="HideCompanyName" class="form-check-input" id="hide" /><label for="hide" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Şirket adını gizle</label></div>
+            <div class="form-check"><input asp-for="IsActive" class="form-check-input" id="active" /><label for="active" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Aktif</label></div>
+        </div>
+        <div class="form-group"><label class="form-label">Açıklama</label><textarea asp-for="Description" class="form-control" rows="4"></textarea></div>
+        <div class="form-group"><label class="form-label">Kullanılan Teknolojiler (virgülle ayırın)</label><input asp-for="Technologies" class="form-control" placeholder="C#, SQL Server, ASP.NET Core" /></div>
+        <div style="display:flex;gap:1rem;margin-top:0.5rem;">
+            <button type="submit" class="btn-admin btn-admin-primary">💾 Güncelle</button>
+            <a href="/Admin/Experiences" class="btn-admin btn-admin-secondary">İptal</a>
+        </div>
+    </form>
+</div></div>

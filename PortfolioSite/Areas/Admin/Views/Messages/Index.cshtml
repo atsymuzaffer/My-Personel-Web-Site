@@ -1,0 +1,37 @@
+@using PortfolioSite.Entities
+@model List<ContactMessage>
+@{
+    ViewData["Title"] = "Mesajlar";
+}
+<div class="page-header">
+    <div><h1 class="page-title">Gelen Mesajlar</h1><p class="page-subtitle">@Model.Count(m => !m.IsRead) okunmamış</p></div>
+</div>
+<div class="admin-card">
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead><tr><th>Gönderen</th><th>E-posta</th><th>Konu</th><th>Tarih</th><th>Durum</th><th>İşlemler</th></tr></thead>
+            <tbody>
+                @if (!Model.Any()) {
+                    <tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--admin-text-muted);">Henüz mesaj yok</td></tr>
+                }
+                @foreach (var msg in Model) {
+                    <tr style="@(!msg.IsRead ? "font-weight:600;" : "")">
+                        <td>@msg.FullName</td>
+                        <td>@msg.Email</td>
+                        <td>@(msg.Subject ?? "(Konusuz)")</td>
+                        <td>@msg.SentAt.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>@if (!msg.IsRead) { <span class="badge-admin badge-unread">Yeni</span> } else { <span class="badge-admin badge-inactive">Okundu</span> }</td>
+                        <td style="display:flex;gap:0.5rem;">
+                            <a href="/Admin/Messages/Detail/@msg.Id" class="btn-admin btn-admin-secondary btn-admin-sm">Görüntüle</a>
+                            <form asp-area="Admin" asp-controller="Messages" asp-action="Delete" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@msg.Id" />
+                                <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm" data-confirm-delete="Bu mesajı silmek istediğinizden emin misiniz?">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

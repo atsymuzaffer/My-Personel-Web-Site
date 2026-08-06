@@ -1,0 +1,112 @@
+@inject PortfolioSite.Interfaces.IPortfolioService PortfolioService
+@{
+    var profile = ViewBag.Profile as PortfolioSite.Entities.SiteProfile ?? await PortfolioService.GetProfileAsync();
+    var fullName = profile?.FullName ?? "John Doe";
+    var title = profile?.Title ?? "Software Engineer & Backend Developer";
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>@(ViewData["Title"] != null ? ViewData["Title"] + " | " : "")@fullName | @title</title>
+    @if (ViewData["MetaDescription"] != null) {
+        <meta name="description" content="@ViewData["MetaDescription"]" />
+    } else {
+        <meta name="description" content="@fullName | @title Portföyü." />
+    }
+    <meta property="og:title" content="@fullName | @title" />
+    <meta property="og:description" content="@(profile?.ShortBio ?? "Backend ve Veritabanı Geliştiricisi")" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@(profile?.WebsiteUrl ?? "https://example.com")" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="@(profile?.WebsiteUrl ?? "https://example.com")" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- tsParticles Background Container -->
+    <div id="tsparticles" aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></div>
+
+    <!-- NAVBAR -->
+    <header>
+        <nav class="navbar" role="navigation" aria-label="Ana menü">
+            <div class="container">
+                <a href="/" class="nav-brand notranslate" translate="no" aria-label="@fullName Ana Sayfa">
+                    <span class="nav-name">@fullName</span>
+                </a>
+
+                <button class="hamburger" aria-label="Menüyü aç" aria-expanded="false" aria-controls="nav-links" id="hamburger-btn">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <ul class="nav-links" id="nav-links" role="list">
+                    <li><a href="/#hero">Ana Sayfa</a></li>
+                    <li><a href="/#about">Hakkımda</a></li>
+                    <li><a href="/#skills">Yetenekler</a></li>
+                    <li><a href="/#experience">Deneyim</a></li>
+                    <li><a href="/#projects">Projeler</a></li>
+                    <li><a href="/#certificates">Sertifikalar</a></li>
+                    <li><a href="/#contact">İletişim</a></li>
+                    <li>
+                        <div class="lang-switch-group notranslate" translate="no">
+                            <button id="lang-tr-btn" class="lang-btn active" title="Türkçe">TR</button>
+                            <span class="lang-sep">/</span>
+                            <button id="lang-en-btn" class="lang-btn" title="English">EN</button>
+                        </div>
+                    </li>
+                    <li><button id="theme-toggle-btn" class="theme-toggle-btn notranslate" translate="no" aria-label="Tema Değiştir"><span>🌙 Karanlık</span></button></li>
+                    <li><a href="/Home/DownloadCv" class="nav-btn-cv">CV İndir ↓</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <strong style="color:var(--text-title);font-size:1rem;" class="notranslate" translate="no">@fullName</strong>
+                    <div class="footer-bottom-text" style="margin-top:0.25rem;">@title</div>
+                </div>
+
+                <ul class="footer-links-group">
+                    @await Component.InvokeAsync("SocialLinks")
+                    <li><a href="/Home/DownloadCv">CV İndir ↓</a></li>
+                    <li><a href="/Admin">Admin Panel ↗</a></li>
+                </ul>
+            </div>
+            <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;" class="footer-bottom-text">
+                <div>&copy; @DateTime.Now.Year <span class="notranslate" translate="no">@fullName</span>. Tüm hakları saklıdır.</div>
+                <div class="notranslate" translate="no">ASP.NET Core 8 & SQL Server</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GOOGLE TRANSLATE HIDDEN CONTAINER -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'tr',
+                includedLanguages: 'tr,en',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- tsParticles -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

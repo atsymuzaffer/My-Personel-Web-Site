@@ -1,0 +1,62 @@
+@model PortfolioSite.Entities.Project
+@{
+    ViewData["Title"] = "Proje Düzenle";
+}
+<div class="page-header">
+    <div><h1 class="page-title">Proje Düzenle</h1></div>
+    <a href="/Admin/Projects" class="btn-admin btn-admin-secondary">← Geri</a>
+</div>
+<div class="admin-card">
+    <div class="admin-card-body">
+        <form asp-area="Admin" asp-controller="Projects" asp-action="Edit" method="post" enctype="multipart/form-data" class="admin-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <div class="form-grid-2">
+                <div class="form-group"><label class="form-label">Proje Adı *</label><input asp-for="Name" class="form-control" required /><span asp-validation-for="Name" class="text-danger"></span></div>
+                <div class="form-group">
+                    <label class="form-label">Durum</label>
+                    <select asp-for="Status" class="form-control">
+                        <option value="0">Geliştiriliyor</option>
+                        <option value="1">Tamamlandı</option>
+                        <option value="2">Arşivlendi</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group"><label class="form-label">Kısa Özet</label><input asp-for="Summary" class="form-control" /></div>
+            <div class="form-group"><label class="form-label">Açıklama</label><textarea asp-for="Description" class="form-control" rows="4"></textarea></div>
+            <div class="form-group"><label class="form-label">Kullanılan Teknolojiler (virgülle ayırın)</label><input asp-for="Technologies" class="form-control" placeholder="C#, ASP.NET Core, SQL Server" /></div>
+            <div class="form-grid-2">
+                <div class="form-group"><label class="form-label">GitHub URL</label><input asp-for="GitHubUrl" class="form-control" /></div>
+                <div class="form-group"><label class="form-label">Canlı Demo URL</label><input asp-for="LiveUrl" class="form-control" /></div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Kapak Görseli</label>
+                @if (!string.IsNullOrEmpty(Model?.CoverImagePath)) {
+                    <img src="@Model.CoverImagePath" id="coverPreview" class="preview-img" style="margin-bottom:0.5rem;" />
+                } else {
+                    <img id="coverPreview" class="preview-img" style="display:none;margin-bottom:0.5rem;" />
+                }
+                <div class="file-upload-area" style="margin-top:0.5rem;">
+                    <input type="file" name="coverImage" accept=".jpg,.jpeg,.png,.webp" data-preview-target="coverPreview" />
+                    <div class="file-upload-icon">🖼</div>
+                    <div class="file-upload-text">Yeni görsel seç veya sürükleyip bırak</div>
+                    <div class="file-upload-hint">JPG, PNG, WebP • Maks 5MB</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:1.5rem;align-items:center;margin-bottom:1rem;">
+                <div class="form-check" style="margin:0;">
+                    <input asp-for="IsFeatured" class="form-check-input" id="featured" />
+                    <label for="featured" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Ana sayfada öne çıkar</label>
+                </div>
+                <div class="form-check" style="margin:0;">
+                    <input asp-for="IsActive" class="form-check-input" id="active" />
+                    <label for="active" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Aktif (yayında)</label>
+                </div>
+            </div>
+            <div style="display:flex;gap:1rem;">
+                <button type="submit" class="btn-admin btn-admin-primary">💾 Güncelle</button>
+                <a href="/Admin/Projects" class="btn-admin btn-admin-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>

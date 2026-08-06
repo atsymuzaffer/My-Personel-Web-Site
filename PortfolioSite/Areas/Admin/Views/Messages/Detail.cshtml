@@ -1,0 +1,25 @@
+@model PortfolioSite.Entities.ContactMessage
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+}
+<div class="page-header">
+    <div><h1 class="page-title">Mesaj Detayı</h1></div>
+    <a href="/Admin/Messages" class="btn-admin btn-admin-secondary">← Geri</a>
+</div>
+<div class="admin-card">
+    <div class="admin-card-body">
+        <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--admin-border-subtle);">
+            <div class="form-grid-2" style="gap:0.75rem;">
+                <div><div style="font-size:0.75rem;color:var(--admin-text-muted);font-weight:600;margin-bottom:0.25rem;">GÖNDEREN</div><div>@Model.FullName</div></div>
+                <div><div style="font-size:0.75rem;color:var(--admin-text-muted);font-weight:600;margin-bottom:0.25rem;">E-POSTA</div><a href="mailto:@Model.Email">@Model.Email</a></div>
+                <div><div style="font-size:0.75rem;color:var(--admin-text-muted);font-weight:600;margin-bottom:0.25rem;">KONU</div><div>@(Model.Subject ?? "—")</div></div>
+                <div><div style="font-size:0.75rem;color:var(--admin-text-muted);font-weight:600;margin-bottom:0.25rem;">TARIH</div><div>@Model.SentAt.ToString("dd MMMM yyyy HH:mm")</div></div>
+            </div>
+        </div>
+        <div style="font-size:0.75rem;color:var(--admin-text-muted);font-weight:600;margin-bottom:0.75rem;">MESAJ</div>
+        <div style="background:rgba(10,15,30,0.5);border:1px solid var(--admin-border-subtle);border-radius:var(--radius-sm);padding:1.25rem;line-height:1.8;white-space:pre-wrap;color:var(--admin-text-secondary);">@Model.Message</div>
+        <div style="margin-top:1.5rem;">
+            <a href="mailto:@Model.Email" class="btn-admin btn-admin-primary">📧 Yanıtla</a>
+        </div>
+    </div>
+</div>
