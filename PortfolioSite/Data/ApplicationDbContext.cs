@@ -62,6 +62,7 @@ public class ApplicationDbContext : IdentityDbContext
             LinkedInUrl = "https://linkedin.com/in/example",
             WebsiteUrl = "https://example.com",
             Location = "İstanbul, Türkiye",
+            Specialization = "SQL Server / C#",
             IsAvailableForWork = true,
             HeroBadgeText = "Yeni fırsatlara açık",
             MetaDescription = "ASP.NET Core, C#, SQL Server ve backend geliştirme projelerini içeren kişisel portföy web sitesi.",

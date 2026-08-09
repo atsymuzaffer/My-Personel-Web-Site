@@ -42,6 +42,7 @@ public class ProfileController : Controller
         profile.LinkedInUrl = model.LinkedInUrl;
         profile.WebsiteUrl = model.WebsiteUrl;
         profile.Location = model.Location;
+        profile.Specialization = model.Specialization;
         profile.IsAvailableForWork = model.IsAvailableForWork;
         profile.HeroBadgeText = model.HeroBadgeText;
         profile.MetaDescription = model.MetaDescription;

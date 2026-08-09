@@ -40,6 +40,9 @@ public class SiteProfile : BaseEntity
     [MaxLength(200)]
     public string? Location { get; set; }
     
+    [MaxLength(200)]
+    public string? Specialization { get; set; } = "SQL Server / C#";
+    
     public bool IsAvailableForWork { get; set; } = true;
     
     [MaxLength(200)]
