@@ -1,0 +1,49 @@
+@model List<PortfolioSite.Entities.Education>
+@{
+    ViewData["Title"] = "Eğitim Bilgileri";
+}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Eğitim Bilgileri</h1>
+        <p class="page-subtitle">Akademik geçmişinizi ve eğitim derecelerinizi yönetin</p>
+    </div>
+    <a href="/Admin/Educations/Create" class="btn-admin btn-admin-primary">+ Eğitim Ekle</a>
+</div>
+<div class="admin-card">
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Okul / Üniversite</th>
+                    <th>Bölüm / Program</th>
+                    <th>Derece</th>
+                    <th>Tarih</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any()) {
+                    <tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--admin-text-muted);">Henüz bir eğitim bilgisi eklenmedi.</td></tr>
+                }
+                @foreach (var edu in Model) {
+                    <tr>
+                        <td style="font-weight:600;">@edu.School</td>
+                        <td>@(edu.Department ?? "—")</td>
+                        <td>@(edu.Degree ?? "—")</td>
+                        <td>@edu.StartDate.ToString("MMM yyyy") - @(edu.IsCurrent ? "Devam Ediyor" : edu.EndDate?.ToString("MMM yyyy") ?? "—")</td>
+                        <td><span class="badge-admin @(edu.IsActive ? "badge-active" : "badge-inactive")">@(edu.IsActive ? "Aktif" : "Pasif")</span></td>
+                        <td style="display:flex;gap:0.5rem;">
+                            <a href="/Admin/Educations/Edit/@edu.Id" class="btn-admin btn-admin-secondary btn-admin-sm">Düzenle</a>
+                            <form asp-area="Admin" asp-controller="Educations" asp-action="Delete" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@edu.Id" />
+                                <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm" data-confirm-delete="Bu eğitim bilgisini silmek istediğinizden emin misiniz?">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

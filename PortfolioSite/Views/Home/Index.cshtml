@@ -198,6 +198,43 @@
     </div>
 </section>
 
+<!-- EDUCATION SECTION -->
+<section id="education" class="section" aria-label="Eğitim">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Akademik Geçmiş</span>
+            <h2 class="section-title">Eğitim Bilgileri</h2>
+            <p class="section-subtitle">Tamamladığım ve devam ettiğim akademik dereceler ve programlar.</p>
+        </div>
+
+        <div class="experience-list">
+            @if (Model.Educations.Any()) {
+                @foreach (var edu in Model.Educations) {
+                    <div class="exp-card">
+                        <div class="exp-header">
+                            <div>
+                                <h3 class="exp-title">@edu.School</h3>
+                                @if (!string.IsNullOrEmpty(edu.Department)) {
+                                    <div class="exp-company">@edu.Department @(!string.IsNullOrEmpty(edu.Degree) ? $"({edu.Degree})" : "")</div>
+                                }
+                            </div>
+                            <div class="exp-date">
+                                @edu.StartDate.ToString("MMM yyyy") - @(edu.IsCurrent ? "Devam Ediyor" : edu.EndDate?.ToString("MMM yyyy"))
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(edu.Description)) {
+                            <p class="exp-desc">@edu.Description</p>
+                        }
+                    </div>
+                }
+            } else {
+                <p class="mono" style="color:var(--text-dim);">Henüz bir eğitim bilgisi eklenmedi.</p>
+            }
+        </div>
+    </div>
+</section>
+
 <!-- PROJECTS SECTION -->
 <section id="projects" class="section" aria-label="Projeler">
     <div class="container">
