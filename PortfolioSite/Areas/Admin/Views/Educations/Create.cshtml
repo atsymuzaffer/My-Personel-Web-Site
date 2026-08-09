@@ -8,25 +8,69 @@
 </div>
 <div class="admin-card">
     <div class="admin-card-body">
-        <form asp-area="Admin" asp-controller="Educations" asp-action="Create" method="post" class="admin-form">
+        <form asp-area="Admin" asp-controller="Educations" asp-action="Create" method="post" enctype="multipart/form-data" class="admin-form">
             @Html.AntiForgeryToken()
             <div class="form-grid-2">
-                <div class="form-group"><label class="form-label">Okul / Üniversite *</label><input asp-for="School" class="form-control" placeholder="Örn: İstanbul Teknik Üniversitesi" required /></div>
-                <div class="form-group"><label class="form-label">Bölüm / Program</label><input asp-for="Department" class="form-control" placeholder="Örn: Bilgisayar Mühendisliği" /></div>
+                <div class="form-group">
+                    <label class="form-label">Okul / Üniversite *</label>
+                    <input asp-for="School" class="form-control" placeholder="Örn: İstanbul Teknik Üniversitesi" required />
+                    <span asp-validation-for="School" style="color:#f87171;font-size:0.75rem;"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bölüm / Program</label>
+                    <input asp-for="Department" class="form-control" placeholder="Örn: Bilgisayar Mühendisliği" />
+                </div>
             </div>
             <div class="form-grid-2">
-                <div class="form-group"><label class="form-label">Derece (Örn: Lisans, Yüksek Lisans, Ön Lisans)</label><input asp-for="Degree" class="form-control" placeholder="Örn: Lisans" /></div>
-                <div class="form-group"><label class="form-label">Sıralama (Sort Order)</label><input asp-for="SortOrder" class="form-control" type="number" value="0" /></div>
+                <div class="form-group">
+                    <label class="form-label">Derece (Örn: Lisans, Yüksek Lisans, Ön Lisans)</label>
+                    <input asp-for="Degree" class="form-control" placeholder="Örn: Lisans" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Sıralama Önceliği (Sort Order)</label>
+                    <input asp-for="SortOrder" class="form-control" type="number" value="0" />
+                </div>
             </div>
             <div class="form-grid-2">
-                <div class="form-group"><label class="form-label">Başlangıç Tarihi *</label><input asp-for="StartDate" class="form-control" type="date" required /></div>
-                <div class="form-group"><label class="form-label">Bitiş Tarihi</label><input asp-for="EndDate" class="form-control" type="date" /></div>
+                <div class="form-group">
+                    <label class="form-label">Başlangıç Tarihi *</label>
+                    <input asp-for="StartDate" class="form-control" type="date" required />
+                    <span asp-validation-for="StartDate" style="color:#f87171;font-size:0.75rem;"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bitiş Tarihi</label>
+                    <input asp-for="EndDate" class="form-control" type="date" />
+                    <span asp-validation-for="EndDate" style="color:#f87171;font-size:0.75rem;"></span>
+                </div>
             </div>
             <div style="display:flex;gap:1.5rem;margin-bottom:1rem;">
-                <div class="form-check"><input asp-for="IsCurrent" class="form-check-input" id="isCurrent" /><label for="isCurrent" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Eğitim halen devam ediyor</label></div>
-                <div class="form-check"><input asp-for="IsActive" class="form-check-input" id="isActive" checked /><label for="isActive" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Sitede Göster (Aktif)</label></div>
+                <div class="form-check">
+                    <input asp-for="IsCurrent" class="form-check-input" id="isCurrent" />
+                    <label for="isCurrent" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Eğitim halen devam ediyor (Bitiş tarihi otomatik temizlenir)</label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="IsActive" class="form-check-input" id="isActive" checked />
+                    <label for="isActive" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Sitede Göster (Aktif)</label>
+                </div>
             </div>
-            <div class="form-group"><label class="form-label">Açıklama / Detaylar</label><textarea asp-for="Description" class="form-control" rows="4" placeholder="Eğitim süresince elde edilen başarılar, proje detayları vb."></textarea></div>
+
+            <!-- OKUL LOGOSU YÜKLEME -->
+            <div class="form-group">
+                <label class="form-label">Okul / Kurum Logosu (Opsiyonel)</label>
+                <img id="logoPreview" class="preview-img" style="display:none;margin-bottom:0.5rem;max-height:80px;object-fit:contain;" />
+                <div class="file-upload-area">
+                    <input type="file" name="logoFile" accept=".jpg,.jpeg,.png,.webp" data-preview-target="logoPreview" onchange="if(this.files[0]) document.getElementById('logoFileName').innerText = 'Seçilen dosya: ' + this.files[0].name;" />
+                    <div class="file-upload-icon">🖼️</div>
+                    <div class="file-upload-text">Okul logosu seç veya sürükleyip bırak</div>
+                    <div id="logoFileName" class="file-upload-hint" style="color:#60a5fa;font-weight:600;margin-top:0.25rem;">JPG, PNG, WebP • Maks 5MB</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Açıklama / Detaylar</label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Eğitim süresince elde edilen başarılar, tez konusu, proje detayları vb."></textarea>
+            </div>
+
             <div style="display:flex;gap:1rem;margin-top:0.5rem;">
                 <button type="submit" class="btn-admin btn-admin-primary">💾 Kaydet</button>
                 <a href="/Admin/Educations" class="btn-admin btn-admin-secondary">İptal</a>

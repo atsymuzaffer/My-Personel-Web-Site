@@ -8,26 +8,83 @@
 </div>
 <div class="admin-card">
     <div class="admin-card-body">
-        <form asp-area="Admin" asp-controller="Educations" asp-action="Edit" method="post" class="admin-form">
+        <form asp-area="Admin" asp-controller="Educations" asp-action="Edit" method="post" enctype="multipart/form-data" class="admin-form">
             @Html.AntiForgeryToken()
             <input type="hidden" asp-for="Id" />
             <div class="form-grid-2">
-                <div class="form-group"><label class="form-label">Okul / Üniversite *</label><input asp-for="School" class="form-control" required /></div>
-                <div class="form-group"><label class="form-label">Bölüm / Program</label><input asp-for="Department" class="form-control" /></div>
+                <div class="form-group">
+                    <label class="form-label">Okul / Üniversite *</label>
+                    <input asp-for="School" class="form-control" required />
+                    <span asp-validation-for="School" style="color:#f87171;font-size:0.75rem;"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bölüm / Program</label>
+                    <input asp-for="Department" class="form-control" />
+                </div>
             </div>
             <div class="form-grid-2">
-                <div class="form-group"><label class="form-label">Derece (Örn: Lisans, Yüksek Lisans, Ön Lisans)</label><input asp-for="Degree" class="form-control" /></div>
-                <div class="form-group"><label class="form-label">Sıralama (Sort Order)</label><input asp-for="SortOrder" class="form-control" type="number" /></div>
+                <div class="form-group">
+                    <label class="form-label">Derece (Örn: Lisans, Yüksek Lisans, Ön Lisans)</label>
+                    <input asp-for="Degree" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Sıralama Önceliği (Sort Order)</label>
+                    <input asp-for="SortOrder" class="form-control" type="number" />
+                </div>
             </div>
             <div class="form-grid-2">
-                <div class="form-group"><label class="form-label">Başlangıç Tarihi *</label><input asp-for="StartDate" class="form-control" type="date" required /></div>
-                <div class="form-group"><label class="form-label">Bitiş Tarihi</label><input asp-for="EndDate" class="form-control" type="date" /></div>
+                <div class="form-group">
+                    <label class="form-label">Başlangıç Tarihi *</label>
+                    <input asp-for="StartDate" class="form-control" type="date" required />
+                    <span asp-validation-for="StartDate" style="color:#f87171;font-size:0.75rem;"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bitiş Tarihi</label>
+                    <input asp-for="EndDate" class="form-control" type="date" />
+                    <span asp-validation-for="EndDate" style="color:#f87171;font-size:0.75rem;"></span>
+                </div>
             </div>
             <div style="display:flex;gap:1.5rem;margin-bottom:1rem;">
-                <div class="form-check"><input asp-for="IsCurrent" class="form-check-input" id="isCurrent" /><label for="isCurrent" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Eğitim halen devam ediyor</label></div>
-                <div class="form-check"><input asp-for="IsActive" class="form-check-input" id="isActive" /><label for="isActive" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Sitede Göster (Aktif)</label></div>
+                <div class="form-check">
+                    <input asp-for="IsCurrent" class="form-check-input" id="isCurrent" />
+                    <label for="isCurrent" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Eğitim halen devam ediyor (Bitiş tarihi otomatik temizlenir)</label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="IsActive" class="form-check-input" id="isActive" />
+                    <label for="isActive" class="form-check-label" style="font-size:0.875rem;color:var(--admin-text-secondary);">Sitede Göster (Aktif)</label>
+                </div>
             </div>
-            <div class="form-group"><label class="form-label">Açıklama / Detaylar</label><textarea asp-for="Description" class="form-control" rows="4"></textarea></div>
+
+            <!-- OKUL LOGOSU YÜKLEME & MEVCUT GÖRSEL -->
+            <div class="form-group">
+                <label class="form-label">Okul / Kurum Logosu</label>
+                @if (!string.IsNullOrEmpty(Model?.LogoPath)) {
+                    <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:var(--radius-sm);padding:0.75rem;margin-bottom:0.75rem;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+                            <div>
+                                <span style="color:#34d399;font-weight:600;font-size:0.85rem;">✓ Yüklü Logo:</span>
+                                <span style="font-size:0.85rem;color:var(--admin-text-secondary);font-family:monospace;">@System.IO.Path.GetFileName(Model.LogoPath)</span>
+                            </div>
+                            <button type="submit" form="deleteLogoForm" class="btn-admin btn-admin-danger btn-admin-sm" data-confirm-delete="Okul logosunu silmek istediğinizden emin misiniz?">🗑 Logoyu Sil</button>
+                        </div>
+                    </div>
+                    <img src="@Model.LogoPath" id="logoPreview" class="preview-img" style="margin-bottom:0.5rem;max-height:80px;object-fit:contain;" />
+                } else {
+                    <img id="logoPreview" class="preview-img" style="display:none;margin-bottom:0.5rem;max-height:80px;object-fit:contain;" />
+                }
+                <div class="file-upload-area">
+                    <input type="file" name="logoFile" accept=".jpg,.jpeg,.png,.webp" data-preview-target="logoPreview" onchange="if(this.files[0]) document.getElementById('logoFileName').innerText = 'Seçilen dosya: ' + this.files[0].name;" />
+                    <div class="file-upload-icon">🖼️</div>
+                    <div class="file-upload-text">Yeni logo seç veya sürükleyip bırak</div>
+                    <div id="logoFileName" class="file-upload-hint" style="color:#60a5fa;font-weight:600;margin-top:0.25rem;">JPG, PNG, WebP • Maks 5MB</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Açıklama / Detaylar</label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            </div>
+
             <div style="display:flex;gap:1rem;margin-top:0.5rem;">
                 <button type="submit" class="btn-admin btn-admin-primary">💾 Güncelle</button>
                 <a href="/Admin/Educations" class="btn-admin btn-admin-secondary">İptal</a>
@@ -35,3 +92,8 @@
         </form>
     </div>
 </div>
+
+<form id="deleteLogoForm" asp-area="Admin" asp-controller="Educations" asp-action="DeleteLogo" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+</form>

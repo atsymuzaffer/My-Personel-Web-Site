@@ -64,7 +64,8 @@ public class PortfolioService : IPortfolioService
         => await _db.Educations
             .AsNoTracking()
             .Where(e => e.IsActive)
-            .OrderByDescending(e => e.StartDate)
+            .OrderBy(e => e.SortOrder)
+            .ThenByDescending(e => e.StartDate)
             .ToListAsync(ct);
 
     public async Task<List<Certificate>> GetCertificatesAsync(CancellationToken ct = default)
