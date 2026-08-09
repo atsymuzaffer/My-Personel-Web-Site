@@ -1,0 +1,99 @@
+@model PortfolioSite.ViewModels.InitialSetupViewModel
+@inject PortfolioSite.Interfaces.IPortfolioService PortfolioService
+@{
+    Layout = null;
+    ViewData["Title"] = "İlk Kurulum & Güvenlik";
+    var profile = await PortfolioService.GetProfileAsync();
+    var fullName = profile?.FullName ?? "John Doe";
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>İlk Kurulum & Güvenlik | @fullName</title>
+    <script>
+        (function() {
+            var name = "@fullName".trim() || "MA";
+            var parts = name.split(/\s+/).filter(Boolean);
+            var initials = "MA";
+            if (parts.length === 1) {
+                initials = parts[0].length >= 2 ? parts[0].substring(0, 2).toUpperCase() : parts[0].toUpperCase();
+            } else if (parts.length >= 2) {
+                initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            var fontSize = initials.length > 2 ? "36" : "44";
+            var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="%230B0D10"/><rect width="94" height="94" x="3" y="3" rx="22" fill="none" stroke="%23397BFF" stroke-width="4" opacity="0.4"/><text x="50" y="55" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="' + fontSize + '" font-weight="800" fill="%23397BFF" text-anchor="middle" dominant-baseline="central">' + initials + '</text></svg>';
+            var link = document.createElement('link');
+            link.rel = 'icon';
+            link.type = 'image/svg+xml';
+            link.href = 'data:image/svg+xml,' + svg;
+            document.head.appendChild(link);
+        })();
+    </script>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body>
+<main class="login-page">
+    <div class="login-card" style="max-width: 480px;">
+        <div class="login-header">
+            <div class="login-logo" style="background:#f59e0b;color:#0b0d10;">🔒</div>
+            <h1 class="login-title">İlk Kurulum & Güvenlik</h1>
+            <p class="login-subtitle">Varsayılan demo bilgilerinizi değiştirmek zorunludur.</p>
+        </div>
+
+        <div class="alert" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#fbbf24;margin-bottom:1.25rem;font-size:0.825rem;line-height:1.5;">
+            ⚠️ <strong>Güvenlik Uyarısı:</strong> İlk girişiniz demo hesapla gerçekleşti. Admin paneline erişim sağlamadan önce lütfen kendi kişisel e-posta ve şifrenizi belirleyin.
+        </div>
+
+        @if (!ViewData.ModelState.IsValid) {
+            <div class="alert alert-error">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors)) {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        }
+
+        <form asp-area="Admin" asp-controller="Account" asp-action="InitialSetup" method="post" class="admin-form">
+            @Html.AntiForgeryToken()
+            
+            <div class="form-group">
+                <label class="form-label" asp-for="NewEmail">Yeni E-posta Adresi *</label>
+                <input asp-for="NewEmail" class="form-control" placeholder="ornek@domain.com" required autofocus />
+                <span asp-validation-for="NewEmail" style="color:#f87171;font-size:0.75rem;"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" asp-for="ConfirmEmail">Yeni E-posta Adresi Tekrarı *</label>
+                <input asp-for="ConfirmEmail" class="form-control" placeholder="ornek@domain.com" required />
+                <span asp-validation-for="ConfirmEmail" style="color:#f87171;font-size:0.75rem;"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" asp-for="NewPassword">Yeni Şifre *</label>
+                <input asp-for="NewPassword" class="form-control" type="password" placeholder="En az 8 karakter (Büyük harf ve rakam içermelidir)" required />
+                <span asp-validation-for="NewPassword" style="color:#f87171;font-size:0.75rem;"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" asp-for="ConfirmPassword">Yeni Şifre Tekrarı *</label>
+                <input asp-for="ConfirmPassword" class="form-control" type="password" placeholder="Yeni şifrenizi tekrar girin" required />
+                <span asp-validation-for="ConfirmPassword" style="color:#f87171;font-size:0.75rem;"></span>
+            </div>
+
+            <button type="submit" class="btn-admin btn-admin-primary" style="width:100%;justify-content:center;padding:0.75rem;margin-top:0.75rem;font-weight:700;">
+                🔐 Kurulumu Tamamla ve Giriş Yap
+            </button>
+        </form>
+
+        <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post" style="margin-top:0.75rem;text-align:center;">
+            @Html.AntiForgeryToken()
+            <button type="submit" style="background:none;border:none;color:var(--admin-text-muted);font-size:0.8rem;cursor:pointer;text-decoration:underline;">
+                Çıkış Yap
+            </button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

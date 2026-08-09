@@ -94,15 +94,16 @@ My-Personel-Web-Site/
 
 ---
 
-## 🔐 Varsayılan Admin Giriş Bilgileri
+## 🔐 Varsayılan Admin İlk Kurulum Bilgileri
 
-Uygulama ilk kez çalıştığında varsayılan Admin kullanıcısı veritabanına otomatik yüklenir:
+Projeyi yerel ortamda test etmek veya ilk kurulumu gerçekleştirmek için varsayılan demo giriş bilgileri:
 
 - **Admin URL:** `http://localhost:5145/Admin`
-- **E-posta:** `admin@example.com`
-- **Şifre:** `Admin@2025!`
+- **Demo E-posta:** `admin@example.com`
+- **Demo Şifre:** `Admin@2025!`
 
-*(Giriş yaptıktan sonra panel üzerinden bilgilerinizi güncelleyebilirsiniz.)*
+> [!IMPORTANT]
+> **Zorunlu İlk Kurulum (Initial Setup):** Bu varsayılan bilgiler yalnızca projeyi ilk kez kuran kişilerin erişim sağlayabilmesi içindir. Sistem güvenliği gereği demo bilgilerle yapılan ilk girişte uygulama sizi otomatik olarak **Zorunlu İlk Kurulum (`/Admin/Account/InitialSetup`)** ekranına yönlendirir ve kendi kişisel e-posta ve şifrenizi belirlemenizi şart koşar. Bilgiler değiştirildikten sonra demo hesap kalıcı olarak kapatılır.
 
 ---
 

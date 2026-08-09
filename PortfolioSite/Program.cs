@@ -14,7 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Identity
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddDefaultIdentity<PortfolioSite.Entities.ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = true;
@@ -42,7 +42,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<PortfolioSite.Filters.MustChangeCredentialsFilter>();
+});
 builder.Services.AddRazorPages();
 
 // Anti-forgery
@@ -60,18 +63,24 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
 
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<PortfolioSite.Entities.ApplicationUser>>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     // Create Admin role if not exists
     if (!await roleManager.RoleExistsAsync("Admin"))
         await roleManager.CreateAsync(new IdentityRole("Admin"));
 
-    // Seed default demo admin user ONLY in Development environment on clean DB
-    if (app.Environment.IsDevelopment() && !await userManager.Users.AnyAsync())
+    // Seed default demo admin user ONLY if NO users exist at all in database
+    if (!await userManager.Users.AnyAsync())
     {
         var adminEmail = "admin@example.com";
-        var adminUser = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+        var adminUser = new PortfolioSite.Entities.ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true,
+            MustChangeCredentials = true
+        };
         var result = await userManager.CreateAsync(adminUser, "Admin@2025!");
         if (result.Succeeded)
             await userManager.AddToRoleAsync(adminUser, "Admin");

@@ -1,26 +1,34 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PortfolioSite.Entities;
+using PortfolioSite.ViewModels;
 
 namespace PortfolioSite.Areas.Admin.Controllers;
 
 [Area("Admin")]
 public class AccountController : Controller
 {
-    private readonly SignInManager<IdentityUser> _signIn;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signIn;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AccountController(SignInManager<IdentityUser> signIn, UserManager<IdentityUser> userManager)
+    public AccountController(SignInManager<ApplicationUser> signIn, UserManager<ApplicationUser> userManager)
     {
         _signIn = signIn;
         _userManager = userManager;
     }
 
     [HttpGet]
-    public IActionResult Login(string? returnUrl = null)
+    public async Task<IActionResult> Login(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser != null && currentUser.MustChangeCredentials)
+                return RedirectToAction(nameof(InitialSetup));
+
             return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+        }
         ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
@@ -45,8 +53,12 @@ public class AccountController : Controller
         var result = await _signIn.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure: true);
         if (result.Succeeded)
         {
+            if (user.MustChangeCredentials)
+                return RedirectToAction(nameof(InitialSetup));
+
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
+
             return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
         }
 
@@ -56,6 +68,81 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, "Geçersiz e-posta veya şifre.");
 
         return View();
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> InitialSetup()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return RedirectToAction(nameof(Login));
+
+        if (!user.MustChangeCredentials)
+            return RedirectToAction("Index", "Dashboard");
+
+        return View(new InitialSetupViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> InitialSetup(InitialSetupViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return RedirectToAction(nameof(Login));
+
+        if (!user.MustChangeCredentials)
+            return RedirectToAction("Index", "Dashboard");
+
+        // Check if new email is taken by another account
+        if (!string.Equals(user.Email, model.NewEmail, StringComparison.OrdinalIgnoreCase))
+        {
+            var existing = await _userManager.FindByEmailAsync(model.NewEmail);
+            if (existing != null && existing.Id != user.Id)
+            {
+                ModelState.AddModelError("NewEmail", "Bu e-posta adresi başka bir kullanıcı tarafından kullanılıyor.");
+                return View(model);
+            }
+        }
+
+        // 1. Change password from demo password "Admin@2025!" to new password
+        var changePasswordResult = await _userManager.ChangePasswordAsync(user, "Admin@2025!", model.NewPassword);
+        if (!changePasswordResult.Succeeded)
+        {
+            foreach (var err in changePasswordResult.Errors)
+                ModelState.AddModelError(string.Empty, err.Description);
+            return View(model);
+        }
+
+        // 2. Set new email and username
+        var setEmailResult = await _userManager.SetEmailAsync(user, model.NewEmail);
+        if (!setEmailResult.Succeeded)
+        {
+            foreach (var err in setEmailResult.Errors)
+                ModelState.AddModelError(string.Empty, err.Description);
+            return View(model);
+        }
+
+        var setUserNameResult = await _userManager.SetUserNameAsync(user, model.NewEmail);
+        if (!setUserNameResult.Succeeded)
+        {
+            foreach (var err in setUserNameResult.Errors)
+                ModelState.AddModelError(string.Empty, err.Description);
+            return View(model);
+        }
+
+        // 3. Mark MustChangeCredentials = false and update security stamp
+        user.MustChangeCredentials = false;
+        await _userManager.UpdateAsync(user);
+        await _userManager.UpdateSecurityStampAsync(user);
+
+        // 4. Force sign out and redirect to login page
+        await _signIn.SignOutAsync();
+        TempData["Success"] = "İlk kurulum başarıyla tamamlandı! Lütfen yeni e-posta ve şifrenizle giriş yapınız.";
+        return RedirectToAction(nameof(Login));
     }
 
     [HttpPost]
@@ -76,7 +163,7 @@ public class AccountController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (user == null) return RedirectToAction(nameof(Login));
 
-        var model = new PortfolioSite.ViewModels.ChangeCredentialsViewModel
+        var model = new ChangeCredentialsViewModel
         {
             CurrentEmail = user.Email ?? string.Empty,
             NewEmail = user.Email ?? string.Empty
@@ -88,7 +175,7 @@ public class AccountController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> ChangeCredentials(PortfolioSite.ViewModels.ChangeCredentialsViewModel model)
+    public async Task<IActionResult> ChangeCredentials(ChangeCredentialsViewModel model)
     {
         if (!ModelState.IsValid)
             return View(model);

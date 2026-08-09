@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<Microsoft.AspNetCore.Identity.IdentityUser> SignInManager
+@inject SignInManager<PortfolioSite.Entities.ApplicationUser> SignInManager
 @inject PortfolioSite.Interfaces.IPortfolioService PortfolioService
 @{
     var profile = await PortfolioService.GetProfileAsync();

@@ -27,6 +27,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWNjb3VudFxDaGFuZ2VDcmVkZW50aWFscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/a_muz/OneDrive/Belgeler/GitHub/My-Personel-Web-Site/PortfolioSite/Areas/Admin/Views/Account/InitialSetup.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWNjb3VudFxJbml0aWFsU2V0dXAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/a_muz/OneDrive/Belgeler/GitHub/My-Personel-Web-Site/PortfolioSite/Areas/Admin/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
