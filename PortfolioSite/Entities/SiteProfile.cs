@@ -43,6 +43,18 @@ public class SiteProfile : BaseEntity
     [MaxLength(200)]
     public string? Specialization { get; set; } = "SQL Server / C#";
     
+    [MaxLength(200)]
+    public string? FocusArea { get; set; } = "Backend & Veritabanı Mimarisi";
+    
+    [MaxLength(300)]
+    public string? PrimaryTechs { get; set; } = "C#, ASP.NET Core, EF Core, SQL Server";
+    
+    [MaxLength(300)]
+    public string? DatabaseSkills { get; set; } = "T-SQL, Stored Procedure, Trigger, CTE, JSON";
+    
+    [MaxLength(300)]
+    public string? BusinessProcesses { get; set; } = "ERP Entegrasyonu, İş Akışları, Muhasebe";
+    
     public bool IsAvailableForWork { get; set; } = true;
     
     [MaxLength(200)]

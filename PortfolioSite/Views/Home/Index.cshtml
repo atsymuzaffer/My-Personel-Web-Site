@@ -109,19 +109,19 @@
                 <h4>Detaylar & Uzmanlık</h4>
                 <div class="info-row">
                     <div class="info-row-label">Odak Alanı</div>
-                    <div class="info-row-val">Backend & Veritabanı Mimarisi</div>
+                    <div class="info-row-val">@(profile?.FocusArea ?? "Backend & Veritabanı Mimarisi")</div>
                 </div>
                 <div class="info-row">
                     <div class="info-row-label">Teknolojiler</div>
-                    <div class="info-row-val">C#, ASP.NET Core, EF Core, SQL Server</div>
+                    <div class="info-row-val">@(profile?.PrimaryTechs ?? "C#, ASP.NET Core, EF Core, SQL Server")</div>
                 </div>
                 <div class="info-row">
                     <div class="info-row-label">Veritabanı Yetkinliği</div>
-                    <div class="info-row-val">T-SQL, Stored Procedure, Trigger, CTE, JSON</div>
+                    <div class="info-row-val">@(profile?.DatabaseSkills ?? "T-SQL, Stored Procedure, Trigger, CTE, JSON")</div>
                 </div>
                 <div class="info-row">
                     <div class="info-row-label">Süreçler</div>
-                    <div class="info-row-val">ERP Entegrasyonu, İş Akışları, Muhasebe</div>
+                    <div class="info-row-val">@(profile?.BusinessProcesses ?? "ERP Entegrasyonu, İş Akışları, Muhasebe")</div>
                 </div>
             </div>
         </div>

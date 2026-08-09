@@ -43,6 +43,10 @@ public class ProfileController : Controller
         profile.WebsiteUrl = model.WebsiteUrl;
         profile.Location = model.Location;
         profile.Specialization = model.Specialization;
+        profile.FocusArea = model.FocusArea;
+        profile.PrimaryTechs = model.PrimaryTechs;
+        profile.DatabaseSkills = model.DatabaseSkills;
+        profile.BusinessProcesses = model.BusinessProcesses;
         profile.IsAvailableForWork = model.IsAvailableForWork;
         profile.HeroBadgeText = model.HeroBadgeText;
         profile.MetaDescription = model.MetaDescription;
