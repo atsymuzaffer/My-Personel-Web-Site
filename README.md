@@ -110,4 +110,4 @@ Uygulama ilk kez çalıştığında varsayılan Admin kullanıcısı veritabanı
 
 **Muzaffer Atasoy** — Backend & Veritabanı Geliştiricisi  
 🌐 **Web:** [muzafferatasoy.com](https://muzafferatasoy.com)  
-📂 **GitHub:** [@atsmuzaffer](https://github.com/atsmuzaffer)
+📂 **GitHub:** [@atsmuzaffer](https://github.com/atsymuzaffer)
