@@ -67,8 +67,8 @@ using (var scope = app.Services.CreateScope())
     if (!await roleManager.RoleExistsAsync("Admin"))
         await roleManager.CreateAsync(new IdentityRole("Admin"));
 
-    // Create default admin user ONLY if no users exist at all in database
-    if (!await userManager.Users.AnyAsync())
+    // Seed default demo admin user ONLY in Development environment on clean DB
+    if (app.Environment.IsDevelopment() && !await userManager.Users.AnyAsync())
     {
         var adminEmail = "admin@example.com";
         var adminUser = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
