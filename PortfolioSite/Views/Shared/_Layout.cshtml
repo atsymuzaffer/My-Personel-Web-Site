@@ -113,14 +113,9 @@
     <script type="text/javascript">
         (function() {
             var lang = localStorage.getItem('portfolio-lang') || 'tr';
-            var domain = window.location.hostname;
-            if (lang === 'tr') {
-                var expires = new Date(Date.now() + 30 * 86400000).toUTCString();
-                document.cookie = "googtrans=/tr/tr; expires=" + expires + "; path=/;";
-                if (domain && domain !== 'localhost') {
-                    document.cookie = "googtrans=/tr/tr; expires=" + expires + "; path=/; domain=" + domain + ";";
-                }
-            }
+            var expires = new Date(Date.now() + 30 * 86400000).toUTCString();
+            var val = (lang === 'en') ? '/tr/en' : '/tr/tr';
+            document.cookie = "googtrans=" + val + "; expires=" + expires + "; path=/;";
         })();
 
         function googleTranslateElementInit() {
@@ -129,9 +124,23 @@
                 includedLanguages: 'tr,en',
                 autoDisplay: false
             }, 'google_translate_element');
+
+            // Apply selected language when widget initializes
+            var targetLang = localStorage.getItem('portfolio-lang') || 'tr';
+            if (targetLang === 'en') {
+                var timer = setInterval(function() {
+                    var select = document.querySelector('.goog-te-combo');
+                    if (select) {
+                        select.value = 'en';
+                        select.dispatchEvent(new Event('change'));
+                        clearInterval(timer);
+                    }
+                }, 100);
+                setTimeout(function() { clearInterval(timer); }, 4000);
+            }
         }
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <!-- tsParticles -->
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>

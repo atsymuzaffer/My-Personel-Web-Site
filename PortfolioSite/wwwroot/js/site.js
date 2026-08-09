@@ -9,20 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const langEnBtn = document.getElementById('lang-en-btn');
 
   function setTranslateCookie(val) {
-    const domain = window.location.hostname;
     const expires = new Date(Date.now() + 30 * 86400000).toUTCString();
     
-    // Clear all existing cookie variations
+    // Clear old variations
     document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${domain};`;
-    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${domain};`;
-
+    
     if (val) {
       document.cookie = `googtrans=${val}; expires=${expires}; path=/;`;
-      if (domain && domain !== 'localhost') {
-        document.cookie = `googtrans=${val}; expires=${expires}; path=/; domain=${domain};`;
-        document.cookie = `googtrans=${val}; expires=${expires}; path=/; domain=.${domain};`;
-      }
     }
   }
 
@@ -35,8 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
       langTrBtn.classList.remove('active');
     }
   } else {
-    // FORCE TR: Ensure no /tr/en cookie remains
-    setTranslateCookie('/tr/tr');
     if (langTrBtn && langEnBtn) {
       langTrBtn.classList.add('active');
       langEnBtn.classList.remove('active');
@@ -57,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         select.value = 'en';
         select.dispatchEvent(new Event('change'));
       }
-      window.location.reload();
+      setTimeout(() => window.location.reload(), 150);
     });
 
     // TR CLICK: Restore 100% Original Turkish State
@@ -73,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         select.value = 'tr';
         select.dispatchEvent(new Event('change'));
       }
-      window.location.reload();
+      setTimeout(() => window.location.reload(), 150);
     });
   }
 
