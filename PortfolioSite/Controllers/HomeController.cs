@@ -113,6 +113,41 @@ public class HomeController : Controller
         return File(bytes, "application/pdf", "CV.pdf");
     }
 
+    [Route("favicon.ico")]
+    [Route("favicon.svg")]
+    [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
+    public async Task<IActionResult> Favicon(CancellationToken ct)
+    {
+        var profile = await _portfolio.GetProfileAsync(ct);
+        var name = profile?.FullName?.Trim() ?? "MA";
+        
+        string initials = "MA";
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 1)
+            {
+                initials = parts[0].Length >= 2 
+                    ? parts[0].Substring(0, 2).ToUpperInvariant() 
+                    : parts[0].ToUpperInvariant();
+            }
+            else if (parts.Length >= 2)
+            {
+                initials = (parts[0][0].ToString() + parts[^1][0].ToString()).ToUpperInvariant();
+            }
+        }
+
+        var fontSize = initials.Length > 2 ? "36" : "44";
+
+        var svg = $@"<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 100 100"">
+  <rect width=""100"" height=""100"" rx=""24"" fill=""#0B0D10""/>
+  <rect width=""94"" height=""94"" x=""3"" y=""3"" rx=""22"" fill=""none"" stroke=""#397BFF"" stroke-width=""4"" opacity=""0.4""/>
+  <text x=""50"" y=""55"" font-family=""-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"" font-size=""{fontSize}"" font-weight=""800"" fill=""#397BFF"" text-anchor=""middle"" dominant-baseline=""central"">{initials}</text>
+</svg>";
+
+        return Content(svg, "image/svg+xml", System.Text.Encoding.UTF8);
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

@@ -1,6 +1,9 @@
+@inject PortfolioSite.Interfaces.IPortfolioService PortfolioService
 @{
     Layout = null;
     ViewData["Title"] = "Admin Girişi";
+    var profile = await PortfolioService.GetProfileAsync();
+    var fullName = profile?.FullName ?? "John Doe";
 }
 <!DOCTYPE html>
 <html lang="tr">
@@ -8,7 +11,26 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
-    <title>Admin Girişi | Portföy</title>
+    <title>Admin Girişi | @fullName</title>
+    <script>
+        (function() {
+            var name = "@fullName".trim() || "MA";
+            var parts = name.split(/\s+/).filter(Boolean);
+            var initials = "MA";
+            if (parts.length === 1) {
+                initials = parts[0].length >= 2 ? parts[0].substring(0, 2).toUpperCase() : parts[0].toUpperCase();
+            } else if (parts.length >= 2) {
+                initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            var fontSize = initials.length > 2 ? "36" : "44";
+            var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="%230B0D10"/><rect width="94" height="94" x="3" y="3" rx="22" fill="none" stroke="%23397BFF" stroke-width="4" opacity="0.4"/><text x="50" y="55" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="' + fontSize + '" font-weight="800" fill="%23397BFF" text-anchor="middle" dominant-baseline="central">' + initials + '</text></svg>';
+            var link = document.createElement('link');
+            link.rel = 'icon';
+            link.type = 'image/svg+xml';
+            link.href = 'data:image/svg+xml,' + svg;
+            document.head.appendChild(link);
+        })();
+    </script>
     <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
 </head>
 <body>
