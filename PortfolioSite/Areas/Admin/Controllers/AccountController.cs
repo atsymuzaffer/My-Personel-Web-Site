@@ -149,10 +149,17 @@ public class AccountController : Controller
             updatedAny = true;
         }
 
+        // 4. Enforce single admin user rule: purge any other users in database
+        var otherUsers = _userManager.Users.Where(u => u.Id != user.Id).ToList();
+        foreach (var otherUser in otherUsers)
+        {
+            await _userManager.DeleteAsync(otherUser);
+        }
+
         if (updatedAny)
         {
             await _signIn.RefreshSignInAsync(user);
-            TempData["Success"] = "Hesap bilgileriniz (E-Posta / Şifre) başarıyla güncellendi!";
+            TempData["Success"] = "Hesap bilgileriniz (E-Posta / Şifre) başarıyla güncellendi ve tek yönetici olarak kaydedildi!";
         }
         else
         {

@@ -564,23 +564,70 @@ body {
 }
 
 /* ===== RESPONSIVE ===== */
+#sidebar-overlay.active {
+  display: block !important;
+}
+
+.admin-card-body,
+.admin-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
 @media (max-width: 1024px) {
   .admin-sidebar {
     transform: translateX(-100%);
+    z-index: 100;
   }
   .admin-sidebar.open {
     transform: translateX(0);
-    box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+    box-shadow: 4px 0 25px rgba(0,0,0,0.6);
   }
-  .admin-main { margin-left: 0; }
+  .admin-main { margin-left: 0; width: 100%; }
   .admin-hamburger { display: flex; }
-  .form-grid-2 { grid-template-columns: 1fr; }
-  .form-grid-3 { grid-template-columns: 1fr; }
+  .form-grid-2 { grid-template-columns: 1fr !important; }
+  .form-grid-3 { grid-template-columns: 1fr !important; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+@media (max-width: 768px) {
+  .admin-topbar {
+    padding: 0.75rem 1rem;
+  }
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .admin-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .breadcrumb-current {
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .admin-table th, .admin-table td {
+    padding: 0.625rem 0.65rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 640px) {
-  .admin-content { padding: 1rem; }
-  .stats-grid { grid-template-columns: 1fr 1fr; }
-  .admin-table th, .admin-table td { padding: 0.625rem 0.75rem; }
+  .admin-content { padding: 0.75rem; }
+  .admin-card { padding: 1rem; }
+  .admin-card-header { padding: 1rem; }
+  .admin-card-body { padding: 1rem; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .topbar-btn-outline { font-size: 0.75rem; padding: 0.35rem 0.6rem; }
+  .login-card { padding: 1.5rem 1.25rem; }
+  .file-upload-area { padding: 1.25rem 0.75rem; }
 }

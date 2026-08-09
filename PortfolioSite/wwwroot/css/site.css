@@ -528,43 +528,59 @@ header {
     font-size: 0.825rem;
     color: var(--text-muted);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .photo-info-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.3rem 0;
+    word-break: break-word;
 }
 
 .photo-info-item span:last-child {
     color: var(--text-title);
     font-weight: 600;
+    text-align: right;
 }
 
 /* Photo Social Icon Links */
 .photo-social-links {
     display: flex;
-    gap: 0.6rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     margin-top: 0.75rem;
     padding-top: 0.75rem;
     border-top: 1px solid var(--border-subtle);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .social-icon-btn {
-    flex: 1;
+    flex: 1 1 100px;
+    min-width: 90px;
+    max-width: 100%;
+    box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.45rem;
-    padding: 0.5rem 0.65rem;
+    gap: 0.35rem;
+    padding: 0.45rem 0.5rem;
     background-color: var(--bg-dark);
     border: 1px solid var(--border-line);
     border-radius: var(--radius-sm);
     color: var(--text-main);
     font-family: var(--font-mono);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 500;
     transition: all 0.25s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .social-icon-btn:hover {
@@ -1122,12 +1138,14 @@ footer {
     }
 
     .photo-wrapper {
-        width: 220px;
-        height: 260px;
+        width: 260px;
+        max-width: 100%;
+        height: 300px;
     }
 
     .photo-info-card {
-        width: 220px;
+        width: 260px;
+        max-width: 100%;
     }
 
     .about-grid {
