@@ -111,6 +111,18 @@
     <!-- GOOGLE TRANSLATE HIDDEN CONTAINER -->
     <div id="google_translate_element" style="display:none;"></div>
     <script type="text/javascript">
+        (function() {
+            var lang = localStorage.getItem('portfolio-lang') || 'tr';
+            var domain = window.location.hostname;
+            if (lang === 'tr') {
+                var expires = new Date(Date.now() + 30 * 86400000).toUTCString();
+                document.cookie = "googtrans=/tr/tr; expires=" + expires + "; path=/;";
+                if (domain && domain !== 'localhost') {
+                    document.cookie = "googtrans=/tr/tr; expires=" + expires + "; path=/; domain=" + domain + ";";
+                }
+            }
+        })();
+
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'tr',

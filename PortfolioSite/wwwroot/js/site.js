@@ -8,50 +8,71 @@ document.addEventListener('DOMContentLoaded', () => {
   const langTrBtn = document.getElementById('lang-tr-btn');
   const langEnBtn = document.getElementById('lang-en-btn');
 
-  // Helper to clear Google Translate cookies completely
-  function clearTranslateCookies() {
+  function setTranslateCookie(val) {
     const domain = window.location.hostname;
+    const expires = new Date(Date.now() + 30 * 86400000).toUTCString();
+    
+    // Clear all existing cookie variations
     document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${domain};`;
     document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${domain};`;
+
+    if (val) {
+      document.cookie = `googtrans=${val}; expires=${expires}; path=/;`;
+      if (domain && domain !== 'localhost') {
+        document.cookie = `googtrans=${val}; expires=${expires}; path=/; domain=${domain};`;
+        document.cookie = `googtrans=${val}; expires=${expires}; path=/; domain=.${domain};`;
+      }
+    }
   }
 
-  // Check current translate state from cookie
-  const isEn = document.cookie.includes('/tr/en') || localStorage.getItem('portfolio-lang') === 'en';
+  // Check language state
+  const currentLang = localStorage.getItem('portfolio-lang') || 'tr';
 
-  if (isEn && langEnBtn && langTrBtn) {
-    langEnBtn.classList.add('active');
-    langTrBtn.classList.remove('active');
+  if (currentLang === 'en') {
+    if (langEnBtn && langTrBtn) {
+      langEnBtn.classList.add('active');
+      langTrBtn.classList.remove('active');
+    }
+  } else {
+    // FORCE TR: Ensure no /tr/en cookie remains
+    setTranslateCookie('/tr/tr');
+    if (langTrBtn && langEnBtn) {
+      langTrBtn.classList.add('active');
+      langEnBtn.classList.remove('active');
+    }
   }
 
   if (langTrBtn && langEnBtn) {
     // EN CLICK: Trigger English Translation
-    langEnBtn.addEventListener('click', () => {
+    langEnBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       if (langEnBtn.classList.contains('active')) return;
       
       localStorage.setItem('portfolio-lang', 'en');
-      document.cookie = "googtrans=/tr/en; path=/;";
+      setTranslateCookie('/tr/en');
       
       const select = document.querySelector('.goog-te-combo');
       if (select) {
         select.value = 'en';
         select.dispatchEvent(new Event('change'));
-      } else {
-        window.location.reload();
       }
-      
-      langEnBtn.classList.add('active');
-      langTrBtn.classList.remove('active');
+      window.location.reload();
     });
 
-    // TR CLICK: Restore 100% Original Page State (No Machine Translation)
-    langTrBtn.addEventListener('click', () => {
+    // TR CLICK: Restore 100% Original Turkish State
+    langTrBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       if (langTrBtn.classList.contains('active')) return;
       
       localStorage.setItem('portfolio-lang', 'tr');
-      clearTranslateCookies();
+      setTranslateCookie('/tr/tr');
       
-      // Reload page to display 100% original C# Razor HTML template
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = 'tr';
+        select.dispatchEvent(new Event('change'));
+      }
       window.location.reload();
     });
   }
