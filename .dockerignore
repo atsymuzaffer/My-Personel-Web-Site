@@ -1,0 +1,15 @@
+# DÜZENLENDİ: Build çıktıları Docker image'a gönderilmiyor.
+**/bin/
+**/obj/
+
+# DÜZENLENDİ: Visual Studio kullanıcı/geçici dosyaları hariç tutuluyor.
+.vs/
+*.user
+*.suo
+
+# DÜZENLENDİ: Git dosyaları Docker build context'ine alınmıyor.
+.git/
+.github/
+
+# DÜZENLENDİ: Eski SQLite app.db dosyası production image'a alınmıyor.
+**/app.db

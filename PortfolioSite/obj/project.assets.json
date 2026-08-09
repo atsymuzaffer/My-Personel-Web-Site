@@ -4842,11 +4842,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\a_muz\\Desktop\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
+      "projectUniqueName": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
       "projectName": "PortfolioSite",
-      "projectPath": "C:\\Users\\a_muz\\Desktop\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
+      "projectPath": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
       "packagesPath": "C:\\Users\\a_muz\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\a_muz\\Desktop\\My-Personel-Web-Site\\PortfolioSite\\obj\\",
+      "outputPath": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

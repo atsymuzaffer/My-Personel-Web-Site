@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2SlnjbVljt0=",
+  "dgSpecHash": "zEWT0+Jn6G4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\a_muz\\Desktop\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
+  "projectFilePath": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\a_muz\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\a_muz\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
@@ -103,9 +103,9 @@
       "code": "NU1902",
       "level": "Warning",
       "message": "'SixLabors.ImageSharp' 3.1.7 paketinde önem derecesi orta olan bilinen bir https://github.com/advisories/GHSA-rxmq-m78w-7wmc güvenlik açığı var",
-      "projectPath": "C:\\Users\\a_muz\\Desktop\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
+      "projectPath": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\a_muz\\Desktop\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
+      "filePath": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
       "libraryId": "SixLabors.ImageSharp",
       "targetGraphs": [
         "net8.0"

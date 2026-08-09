@@ -68,4 +68,97 @@ public class AccountController : Controller
     }
 
     public IActionResult AccessDenied() => View();
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ChangeCredentials()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return RedirectToAction(nameof(Login));
+
+        var model = new PortfolioSite.ViewModels.ChangeCredentialsViewModel
+        {
+            CurrentEmail = user.Email ?? string.Empty,
+            NewEmail = user.Email ?? string.Empty
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ChangeCredentials(PortfolioSite.ViewModels.ChangeCredentialsViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return RedirectToAction(nameof(Login));
+
+        // 1. Verify current password
+        var passwordCheck = await _userManager.CheckPasswordAsync(user, model.CurrentPassword);
+        if (!passwordCheck)
+        {
+            ModelState.AddModelError("CurrentPassword", "Mevcut şifreniz hatalı.");
+            return View(model);
+        }
+
+        bool updatedAny = false;
+
+        // 2. Check if email is changing
+        if (!string.Equals(user.Email, model.NewEmail, StringComparison.OrdinalIgnoreCase))
+        {
+            var existingUserWithEmail = await _userManager.FindByEmailAsync(model.NewEmail);
+            if (existingUserWithEmail != null && existingUserWithEmail.Id != user.Id)
+            {
+                ModelState.AddModelError("NewEmail", "Bu e-posta adresi başka bir kullanıcı tarafından kullanılıyor.");
+                return View(model);
+            }
+
+            var setEmailResult = await _userManager.SetEmailAsync(user, model.NewEmail);
+            if (!setEmailResult.Succeeded)
+            {
+                foreach (var err in setEmailResult.Errors)
+                    ModelState.AddModelError(string.Empty, err.Description);
+                return View(model);
+            }
+
+            var setUserNameResult = await _userManager.SetUserNameAsync(user, model.NewEmail);
+            if (!setUserNameResult.Succeeded)
+            {
+                foreach (var err in setUserNameResult.Errors)
+                    ModelState.AddModelError(string.Empty, err.Description);
+                return View(model);
+            }
+
+            updatedAny = true;
+        }
+
+        // 3. Check if password is changing
+        if (!string.IsNullOrWhiteSpace(model.NewPassword))
+        {
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                foreach (var err in changePasswordResult.Errors)
+                    ModelState.AddModelError(string.Empty, err.Description);
+                return View(model);
+            }
+
+            updatedAny = true;
+        }
+
+        if (updatedAny)
+        {
+            await _signIn.RefreshSignInAsync(user);
+            TempData["Success"] = "Hesap bilgileriniz (E-Posta / Şifre) başarıyla güncellendi!";
+        }
+        else
+        {
+            TempData["Success"] = "Herhangi bir değişiklik yapılmadı.";
+        }
+
+        return RedirectToAction(nameof(ChangeCredentials));
+    }
 }

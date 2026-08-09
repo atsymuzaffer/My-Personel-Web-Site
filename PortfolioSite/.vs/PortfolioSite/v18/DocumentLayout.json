@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{11849438-BDE0-444C-AAC1-E872B96EFBEB}|PortfolioSite.csproj|c:\\users\\a_muz\\onedrive\\belgeler\\github\\my-personel-web-site\\portfoliosite\\portfoliosite.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{11849438-BDE0-444C-AAC1-E872B96EFBEB}|PortfolioSite.csproj|solutionrelative:portfoliosite.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PortfolioSite",
+              "DocumentMoniker": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
+              "RelativeDocumentMoniker": "PortfolioSite.csproj",
+              "ToolTip": "C:\\Users\\a_muz\\OneDrive\\Belgeler\\GitHub\\My-Personel-Web-Site\\PortfolioSite\\PortfolioSite.csproj",
+              "RelativeToolTip": "PortfolioSite.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-08-09T05:33:19.287Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
