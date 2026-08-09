@@ -203,29 +203,35 @@ header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    white-space: nowrap !important;
+    flex-shrink: 0;
+    min-width: max-content;
 }
 
 .nav-name {
     font-family: var(--font-title);
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--text-title);
     letter-spacing: -0.02em;
+    white-space: nowrap !important;
+    display: inline-block;
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 0.95rem;
     list-style: none;
 }
 
 .nav-links a {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-muted);
     position: relative;
     padding: 0.2rem 0;
+    white-space: nowrap;
 }
 
 .nav-links a:hover,
@@ -260,6 +266,12 @@ header {
     padding: 0.4rem 0.85rem;
     border-radius: var(--radius-sm);
     transition: all 0.25s ease !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    flex-shrink: 0 !important;
+    width: max-content !important;
 }
 
 .nav-btn-cv::after {
@@ -272,20 +284,32 @@ header {
     border-color: var(--accent-blue);
 }
 
-/* TR / EN Language Switcher */
-.lang-switch-group {
+/* Stacked Controls Column (TR/EN on top, ☀️/🌙 on bottom) */
+.nav-controls-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+}
+
+/* TR / EN Language Switcher & Theme Switcher */
+.lang-switch-group,
+.theme-switch-group {
     display: inline-flex;
     align-items: center;
     gap: 0.15rem;
     background: var(--bg-card);
     border: 1px solid var(--border-line);
     border-radius: var(--radius-sm);
-    padding: 0.25rem 0.4rem;
+    padding: 0.15rem 0.35rem;
     font-family: var(--font-mono);
     font-size: 0.8rem;
+    line-height: 1;
 }
 
-.lang-btn {
+.lang-btn,
+.theme-btn {
     background: transparent;
     border: none;
     color: var(--text-dim);
@@ -293,12 +317,17 @@ header {
     font-family: inherit;
     font-size: 0.78rem;
     font-weight: 600;
-    padding: 0.2rem 0.4rem;
+    padding: 0.15rem 0.35rem;
     border-radius: 4px;
     transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
-.lang-btn:hover, .lang-btn.active {
+.lang-btn:hover, .lang-btn.active,
+.theme-btn:hover, .theme-btn.active {
     color: var(--accent-blue);
     background: rgba(59, 130, 246, 0.12);
 }
@@ -306,31 +335,7 @@ header {
 .lang-sep {
     color: var(--text-dim);
     font-size: 0.75rem;
-    opacity: 0.5;
-}
-
-/* Theme Toggle Button */
-.theme-toggle-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border-line);
-    color: var(--text-main);
-    padding: 0.4rem 0.75rem;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.25s ease;
-}
-
-.theme-toggle-btn:hover {
-    border-color: var(--accent-blue);
-    color: var(--accent-blue);
-    background: var(--bg-card-hover);
+    opacity: 0.4;
 }
 
 .hamburger {

@@ -68,22 +68,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== LIGHT / DARK THEME SWITCHER =====
-  const themeBtn = document.getElementById('theme-toggle-btn');
+  // ===== LIGHT / DARK THEME SWITCHER (☀️ / 🌙) =====
+  const themeLightBtn = document.getElementById('theme-light-btn');
+  const themeDarkBtn = document.getElementById('theme-dark-btn');
   const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
-  
+
   function applyTheme(theme) {
     if (theme === 'light') {
       document.documentElement.setAttribute('data-theme', 'light');
-      if (themeBtn) {
-        themeBtn.setAttribute('title', 'Karanlık Temaya Geç');
-        themeBtn.innerHTML = `<span>☀️ Aydınlık</span>`;
+      if (themeLightBtn && themeDarkBtn) {
+        themeLightBtn.classList.add('active');
+        themeDarkBtn.classList.remove('active');
       }
     } else {
       document.documentElement.removeAttribute('data-theme');
-      if (themeBtn) {
-        themeBtn.setAttribute('title', 'Aydınlık Temaya Geç');
-        themeBtn.innerHTML = `<span>🌙 Karanlık</span>`;
+      if (themeLightBtn && themeDarkBtn) {
+        themeDarkBtn.classList.add('active');
+        themeLightBtn.classList.remove('active');
       }
     }
   }
@@ -91,12 +92,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial apply
   applyTheme(savedTheme);
 
-  if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const nextTheme = current === 'light' ? 'dark' : 'light';
-      localStorage.setItem('portfolio-theme', nextTheme);
-      applyTheme(nextTheme);
+  if (themeLightBtn && themeDarkBtn) {
+    themeLightBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.setItem('portfolio-theme', 'light');
+      applyTheme('light');
+    });
+
+    themeDarkBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.setItem('portfolio-theme', 'dark');
+      applyTheme('dark');
     });
   }
 
