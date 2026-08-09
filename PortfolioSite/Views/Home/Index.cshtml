@@ -62,7 +62,7 @@
                         <span>@(profile?.Location ?? "Türkiye")</span>
                     </div>
                     <div class="photo-info-item">
-                        <span>Uzmanlık:</span>
+                        <span>@(profile?.SpecializationLabel ?? "Uzmanlık"):</span>
                         <span>@(profile?.Specialization ?? "SQL Server / C#")</span>
                     </div>
 
@@ -108,19 +108,19 @@
             <div class="info-list-card">
                 <h4>Detaylar & Uzmanlık</h4>
                 <div class="info-row">
-                    <div class="info-row-label">Odak Alanı</div>
+                    <div class="info-row-label">@(profile?.FocusAreaLabel ?? "Odak Alanı")</div>
                     <div class="info-row-val">@(profile?.FocusArea ?? "Backend & Veritabanı Mimarisi")</div>
                 </div>
                 <div class="info-row">
-                    <div class="info-row-label">Teknolojiler</div>
+                    <div class="info-row-label">@(profile?.PrimaryTechsLabel ?? "Teknolojiler")</div>
                     <div class="info-row-val">@(profile?.PrimaryTechs ?? "C#, ASP.NET Core, EF Core, SQL Server")</div>
                 </div>
                 <div class="info-row">
-                    <div class="info-row-label">Veritabanı Yetkinliği</div>
+                    <div class="info-row-label">@(profile?.DatabaseSkillsLabel ?? "Veritabanı Yetkinliği")</div>
                     <div class="info-row-val">@(profile?.DatabaseSkills ?? "T-SQL, Stored Procedure, Trigger, CTE, JSON")</div>
                 </div>
                 <div class="info-row">
-                    <div class="info-row-label">Süreçler</div>
+                    <div class="info-row-label">@(profile?.BusinessProcessesLabel ?? "Süreçler")</div>
                     <div class="info-row-val">@(profile?.BusinessProcesses ?? "ERP Entegrasyonu, İş Akışları, Muhasebe")</div>
                 </div>
             </div>

@@ -42,10 +42,15 @@ public class ProfileController : Controller
         profile.LinkedInUrl = model.LinkedInUrl;
         profile.WebsiteUrl = model.WebsiteUrl;
         profile.Location = model.Location;
+        profile.SpecializationLabel = model.SpecializationLabel;
         profile.Specialization = model.Specialization;
+        profile.FocusAreaLabel = model.FocusAreaLabel;
         profile.FocusArea = model.FocusArea;
+        profile.PrimaryTechsLabel = model.PrimaryTechsLabel;
         profile.PrimaryTechs = model.PrimaryTechs;
+        profile.DatabaseSkillsLabel = model.DatabaseSkillsLabel;
         profile.DatabaseSkills = model.DatabaseSkills;
+        profile.BusinessProcessesLabel = model.BusinessProcessesLabel;
         profile.BusinessProcesses = model.BusinessProcesses;
         profile.IsAvailableForWork = model.IsAvailableForWork;
         profile.HeroBadgeText = model.HeroBadgeText;

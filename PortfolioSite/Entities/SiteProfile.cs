@@ -40,17 +40,32 @@ public class SiteProfile : BaseEntity
     [MaxLength(200)]
     public string? Location { get; set; }
     
+    [MaxLength(100)]
+    public string? SpecializationLabel { get; set; } = "Uzmanlık";
+    
     [MaxLength(200)]
     public string? Specialization { get; set; } = "SQL Server / C#";
+    
+    [MaxLength(100)]
+    public string? FocusAreaLabel { get; set; } = "Odak Alanı";
     
     [MaxLength(200)]
     public string? FocusArea { get; set; } = "Backend & Veritabanı Mimarisi";
     
+    [MaxLength(100)]
+    public string? PrimaryTechsLabel { get; set; } = "Teknolojiler";
+    
     [MaxLength(300)]
     public string? PrimaryTechs { get; set; } = "C#, ASP.NET Core, EF Core, SQL Server";
     
+    [MaxLength(100)]
+    public string? DatabaseSkillsLabel { get; set; } = "Veritabanı Yetkinliği";
+    
     [MaxLength(300)]
     public string? DatabaseSkills { get; set; } = "T-SQL, Stored Procedure, Trigger, CTE, JSON";
+    
+    [MaxLength(100)]
+    public string? BusinessProcessesLabel { get; set; } = "Süreçler";
     
     [MaxLength(300)]
     public string? BusinessProcesses { get; set; } = "ERP Entegrasyonu, İş Akışları, Muhasebe";

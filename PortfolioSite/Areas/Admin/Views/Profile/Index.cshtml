@@ -19,20 +19,30 @@
             <div class="form-group"><label class="form-label">Hakkımda Metni (paragraflar arası boş satır bırakın)</label><textarea asp-for="AboutText" class="form-control" rows="5"></textarea></div>
             <div class="form-grid-2">
                 <div class="form-group"><label class="form-label">E-posta</label><input asp-for="Email" class="form-control" type="email" /></div>
-            <div class="form-grid-2">
                 <div class="form-group"><label class="form-label">Konum</label><input asp-for="Location" class="form-control" /></div>
-                <div class="form-group"><label class="form-label">Uzmanlık (Hero kartı)</label><input asp-for="Specialization" class="form-control" placeholder="SQL Server / C#" /></div>
+            </div>
+            <div class="form-grid-2">
+                <div class="form-group"><label class="form-label">Hero Kart Etiket Başlığı</label><input asp-for="SpecializationLabel" class="form-control" placeholder="Uzmanlık" /></div>
+                <div class="form-group"><label class="form-label">Hero Kart Etiket Değeri</label><input asp-for="Specialization" class="form-control" placeholder="SQL Server / C#" /></div>
             </div>
 
             <div style="border-top:1px solid var(--admin-border);padding-top:1rem;margin-top:0.5rem;margin-bottom:0.5rem;">
-                <h3 style="font-size:0.95rem;color:var(--admin-accent);margin-bottom:0.75rem;">Hakkımda Sağ Kartı (Detaylar & Uzmanlık)</h3>
+                <h3 style="font-size:0.95rem;color:var(--admin-accent);margin-bottom:0.75rem;">Hakkımda Sağ Kartı (Özelleştirilebilir Başlıklar & Değerler)</h3>
                 <div class="form-grid-2">
-                    <div class="form-group"><label class="form-label">Odak Alanı</label><input asp-for="FocusArea" class="form-control" placeholder="Backend & Veritabanı Mimarisi" /></div>
-                    <div class="form-group"><label class="form-label">Temel Teknolojiler</label><input asp-for="PrimaryTechs" class="form-control" placeholder="C#, ASP.NET Core, EF Core, SQL Server" /></div>
+                    <div class="form-group"><label class="form-label">1. Satır Başlığı</label><input asp-for="FocusAreaLabel" class="form-control" placeholder="Odak Alanı" /></div>
+                    <div class="form-group"><label class="form-label">1. Satır Değeri</label><input asp-for="FocusArea" class="form-control" placeholder="Backend & Veritabanı Mimarisi" /></div>
                 </div>
                 <div class="form-grid-2">
-                    <div class="form-group"><label class="form-label">Veritabanı Yetkinliği</label><input asp-for="DatabaseSkills" class="form-control" placeholder="T-SQL, Stored Procedure, Trigger, CTE, JSON" /></div>
-                    <div class="form-group"><label class="form-label">Süreçler</label><input asp-for="BusinessProcesses" class="form-control" placeholder="ERP Entegrasyonu, İş Akışları, Muhasebe" /></div>
+                    <div class="form-group"><label class="form-label">2. Satır Başlığı</label><input asp-for="PrimaryTechsLabel" class="form-control" placeholder="Teknolojiler" /></div>
+                    <div class="form-group"><label class="form-label">2. Satır Değeri</label><input asp-for="PrimaryTechs" class="form-control" placeholder="C#, ASP.NET Core, EF Core, SQL Server" /></div>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group"><label class="form-label">3. Satır Başlığı</label><input asp-for="DatabaseSkillsLabel" class="form-control" placeholder="Veritabanı Yetkinliği" /></div>
+                    <div class="form-group"><label class="form-label">3. Satır Değeri</label><input asp-for="DatabaseSkills" class="form-control" placeholder="T-SQL, Stored Procedure, Trigger, CTE, JSON" /></div>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group"><label class="form-label">4. Satır Başlığı</label><input asp-for="BusinessProcessesLabel" class="form-control" placeholder="Süreçler" /></div>
+                    <div class="form-group"><label class="form-label">4. Satır Değeri</label><input asp-for="BusinessProcesses" class="form-control" placeholder="ERP Entegrasyonu, İş Akışları, Muhasebe" /></div>
                 </div>
             </div>
             <div class="form-group">
