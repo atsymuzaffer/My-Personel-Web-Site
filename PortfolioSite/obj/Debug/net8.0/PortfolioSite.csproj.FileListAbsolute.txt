@@ -363,3 +363,4 @@ C:\Users\a_muz\OneDrive\Belgeler\GitHub\My-Personel-Web-Site\PortfolioSite\obj\D
 C:\Users\a_muz\OneDrive\Belgeler\GitHub\My-Personel-Web-Site\PortfolioSite\obj\Debug\net8.0\PortfolioSite.genruntimeconfig.cache
 C:\Users\a_muz\OneDrive\Belgeler\GitHub\My-Personel-Web-Site\PortfolioSite\obj\Debug\net8.0\ref\PortfolioSite.dll
 C:\Users\a_muz\Desktop\My-Personel-Web-Site\PortfolioSite\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\a_muz\OneDrive\Belgeler\GitHub\My-Personel-Web-Site\PortfolioSite\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
