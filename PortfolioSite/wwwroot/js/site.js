@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4000);
   });
 
-  // ===== TSPARTICLES BACKGROUND =====
+  // ===== TSPARTICLES BACKGROUND (Subtle & Sparse Ambient Nodes) =====
   if (typeof tsParticles !== 'undefined') {
     tsParticles.load("tsparticles", {
       background: { color: { value: "transparent" } },
@@ -166,33 +166,33 @@ document.addEventListener('DOMContentLoaded', () => {
           resize: true
         },
         modes: {
-          grab: { distance: 180, links: { opacity: 0.35, color: "#397BFF" } }
+          grab: { distance: 150, links: { opacity: 0.16, color: "#397BFF" } }
         }
       },
       particles: {
         color: { value: "#397BFF" },
         links: {
           color: "#397BFF",
-          distance: 160,
+          distance: 150,
           enable: true,
-          opacity: 0.15,
+          opacity: 0.08,
           width: 1
         },
         move: {
           enable: true,
-          speed: 0.8,
+          speed: 0.45,
           direction: "none",
           random: false,
           straight: false,
           outModes: { default: "bounce" }
         },
         number: {
-          density: { enable: true, area: 800 },
-          value: 30
+          density: { enable: true, area: 900 },
+          value: 16
         },
-        opacity: { value: 0.4 },
+        opacity: { value: 0.18 },
         shape: { type: "circle" },
-        size: { value: { min: 1, max: 3 } }
+        size: { value: { min: 1, max: 2 } }
       },
       detectRetina: true
     });
