@@ -2,7 +2,6 @@ using PortfolioSite.Interfaces;
 
 namespace PortfolioSite.Services;
 
-// ANTIGRAVITY DEĞİŞİKLİĞİ: Eski text-input dosya yolu sistemi yerine gerçek dosya yükleme servisi
 public class LocalFileStorageService : IFileStorageService
 {
     private readonly IWebHostEnvironment _env;

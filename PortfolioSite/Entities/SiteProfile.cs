@@ -2,11 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PortfolioSite.Entities;
 
-// ANTIGRAVITY DEĞİŞİKLİĞİ: Eski HomePage modelini genişleterek tam portföy profili oluşturuldu
 public class SiteProfile : BaseEntity
 {
     [Required, MaxLength(100)]
-    public string FullName { get; set; } = "John Doe";
+    public string FullName { get; set; } = "Muzaffer Atasoy";
     
     [MaxLength(200)]
     public string Title { get; set; } = "Software Engineer & Backend Developer";

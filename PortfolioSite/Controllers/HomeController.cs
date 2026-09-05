@@ -6,7 +6,6 @@ using PortfolioSite.ViewModels;
 
 namespace PortfolioSite.Controllers;
 
-// ANTIGRAVITY DEĞİŞİKLİĞİ: Tüm public sayfa controller'ı yeniden yazıldı
 public class HomeController : Controller
 {
     private readonly IPortfolioService _portfolio;

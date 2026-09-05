@@ -22,3 +22,9 @@
 ## OS generated files
 .DS_Store
 Thumbs.db
+
+## Agent & AI Skills directories
+.agent/
+.agents/
+.gemini/
+
