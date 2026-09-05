@@ -912,19 +912,31 @@ body {
 }
 
 .login-logo {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-sm);
-  background: var(--admin-accent);
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(23, 138, 144, 0.12);
+  border: 1px solid rgba(23, 138, 144, 0.28);
+  color: var(--admin-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: white;
-  margin: 0 auto 1rem;
-  font-family: var(--font-title);
-  letter-spacing: 0.04em;
+  margin: 0 auto 1.25rem;
+  box-shadow: 0 4px 16px rgba(23, 138, 144, 0.15);
+  overflow: hidden;
+}
+
+.login-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+.login-logo svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
 }
 
 .login-title {
