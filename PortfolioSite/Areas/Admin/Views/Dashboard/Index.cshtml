@@ -1,85 +1,219 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
+
 <div class="page-header">
     <div>
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Portföy sitenize genel bakış</p>
+        <h1 class="page-title">Yönetim Konsolu</h1>
+        <p class="page-subtitle">Portföy sitenizin canlı metrikleri, içerikleri ve hızlı erişim araçları</p>
     </div>
-    <a href="/" target="_blank" class="btn-admin btn-admin-secondary">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-        Siteyi Gör
-    </a>
+    <div class="page-header-actions">
+        <a href="/" target="_blank" class="btn-admin btn-admin-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+            <span>Canlı Siteyi Gör</span>
+        </a>
+    </div>
 </div>
 
+<!-- STATS METRICS GRID -->
 <div class="stats-grid">
     <div class="stat-card-admin">
-        <div class="stat-card-icon stat-icon-blue">📁</div>
-        <div class="stat-card-info"><div class="value">@ViewBag.ActiveProjects</div><div class="label">Aktif Proje</div></div>
-    </div>
-    <div class="stat-card-admin">
-        <div class="stat-card-icon stat-icon-purple">📝</div>
-        <div class="stat-card-info"><div class="value">@ViewBag.TotalBlogPosts</div><div class="label">Blog Yazısı</div></div>
-    </div>
-    <div class="stat-card-admin">
-        <div class="stat-card-icon stat-icon-red">📬</div>
-        <div class="stat-card-info"><div class="value">@ViewBag.UnreadMessages</div><div class="label">Okunmamış Mesaj</div></div>
-    </div>
-    <div class="stat-card-admin">
-        <div class="stat-card-icon stat-icon-yellow">🎓</div>
-        <div class="stat-card-info"><div class="value">@ViewBag.TotalCertificates</div><div class="label">Sertifika</div></div>
-    </div>
-    <div class="stat-card-admin">
-        <div class="stat-card-icon stat-icon-green">🛠</div>
-        <div class="stat-card-info"><div class="value">@ViewBag.TotalSkills</div><div class="label">Yetenek</div></div>
-    </div>
-    <div class="stat-card-admin">
-        <div class="stat-card-icon stat-icon-cyan">📈</div>
-        <div class="stat-card-info"><div class="value">@ViewBag.TotalProjects</div><div class="label">Toplam Proje</div></div>
-    </div>
-</div>
-
-<div class="admin-card">
-    <div class="admin-card-header">
-        <h2 class="admin-card-title">📬 Son Mesajlar</h2>
-        <a href="/Admin/Messages" class="btn-admin btn-admin-secondary btn-admin-sm">Tümünü Gör</a>
-    </div>
-    @if (ViewBag.RecentMessages != null) {
-        <div class="admin-table-wrapper">
-            <table class="admin-table">
-                <thead><tr><th>Gönderen</th><th>Konu</th><th>Tarih</th><th>Durum</th></tr></thead>
-                <tbody>
-                    @foreach (var msg in ViewBag.RecentMessages) {
-                        <tr>
-                            <td>@msg.FullName</td>
-                            <td>@(msg.Subject ?? "(Konusuz)")</td>
-                            <td>@msg.SentAt.ToString("dd MMM yyyy HH:mm")</td>
-                            <td>@if (!msg.IsRead) { <span class="badge-admin badge-unread">Yeni</span> } else { <span class="badge-admin badge-inactive">Okundu</span> }</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="stat-card-top">
+            <div class="stat-card-icon stat-icon-teal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+            </div>
+            <span class="stat-badge-subtle">Aktif</span>
         </div>
-    } else {
-        <div class="admin-card-body"><p style="color:var(--admin-text-muted);">Henüz mesaj yok.</p></div>
-    }
+        <div class="stat-card-info">
+            <div class="value">@ViewBag.ActiveProjects</div>
+            <div class="label">Aktif Proje</div>
+        </div>
+    </div>
+
+    <div class="stat-card-admin">
+        <div class="stat-card-top">
+            <div class="stat-card-icon stat-icon-cyan">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+            </div>
+            <span class="stat-badge-subtle">İçerik</span>
+        </div>
+        <div class="stat-card-info">
+            <div class="value">@ViewBag.TotalBlogPosts</div>
+            <div class="label">Blog Yazısı</div>
+        </div>
+    </div>
+
+    <div class="stat-card-admin">
+        <div class="stat-card-top">
+            <div class="stat-card-icon stat-icon-red">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            @if (ViewBag.UnreadMessages > 0) {
+                <span class="stat-badge-alert">@ViewBag.UnreadMessages Yeni</span>
+            } else {
+                <span class="stat-badge-subtle">Tümü Okundu</span>
+            }
+        </div>
+        <div class="stat-card-info">
+            <div class="value">@ViewBag.UnreadMessages</div>
+            <div class="label">Okunmamış Mesaj</div>
+        </div>
+    </div>
+
+    <div class="stat-card-admin">
+        <div class="stat-card-top">
+            <div class="stat-card-icon stat-icon-amber">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+            </div>
+            <span class="stat-badge-subtle">Onaylı</span>
+        </div>
+        <div class="stat-card-info">
+            <div class="value">@ViewBag.TotalCertificates</div>
+            <div class="label">Sertifika</div>
+        </div>
+    </div>
+
+    <div class="stat-card-admin">
+        <div class="stat-card-top">
+            <div class="stat-card-icon stat-icon-emerald">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <span class="stat-badge-subtle">Yetkinlik</span>
+        </div>
+        <div class="stat-card-info">
+            <div class="value">@ViewBag.TotalSkills</div>
+            <div class="label">Tanımlı Yetenek</div>
+        </div>
+    </div>
+
+    <div class="stat-card-admin">
+        <div class="stat-card-top">
+            <div class="stat-card-icon stat-icon-blue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <span class="stat-badge-subtle">Portföy</span>
+        </div>
+        <div class="stat-card-info">
+            <div class="value">@ViewBag.TotalProjects</div>
+            <div class="label">Toplam Proje</div>
+        </div>
+    </div>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem;">
-    <a href="/Admin/Profile" class="admin-card" style="text-decoration:none;padding:1.25rem;display:flex;align-items:center;gap:0.75rem;transition:all 0.2s;">
-        <span style="font-size:1.5rem;">👤</span>
-        <div><div style="font-weight:700;font-size:0.875rem;">Profil Güncelle</div><div style="font-size:0.75rem;color:var(--admin-text-muted);">Kişisel bilgileri düzenle</div></div>
-    </a>
-    <a href="/Admin/Projects/Create" class="admin-card" style="text-decoration:none;padding:1.25rem;display:flex;align-items:center;gap:0.75rem;transition:all 0.2s;">
-        <span style="font-size:1.5rem;">➕</span>
-        <div><div style="font-weight:700;font-size:0.875rem;">Yeni Proje</div><div style="font-size:0.75rem;color:var(--admin-text-muted);">Proje ekle</div></div>
-    </a>
-    <a href="/Admin/Skills/Create" class="admin-card" style="text-decoration:none;padding:1.25rem;display:flex;align-items:center;gap:0.75rem;transition:all 0.2s;">
-        <span style="font-size:1.5rem;">🛠</span>
-        <div><div style="font-weight:700;font-size:0.875rem;">Yetenek Ekle</div><div style="font-size:0.75rem;color:var(--admin-text-muted);">Beceri ekle</div></div>
-    </a>
-    <a href="/Admin/Messages" class="admin-card" style="text-decoration:none;padding:1.25rem;display:flex;align-items:center;gap:0.75rem;transition:all 0.2s;">
-        <span style="font-size:1.5rem;">📬</span>
-        <div><div style="font-weight:700;font-size:0.875rem;">Mesajlar</div><div style="font-size:0.75rem;color:var(--admin-text-muted);">Gelen kutusunu gör</div></div>
-    </a>
+<!-- DASHBOARD GRID: RECENT MESSAGES & QUICK ACTIONS -->
+<div class="dashboard-main-grid">
+    <!-- RECENT MESSAGES CARD -->
+    <div class="admin-card dashboard-messages-card">
+        <div class="admin-card-header">
+            <div class="card-header-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="header-icon"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <h2 class="admin-card-title">Son Gelen İletişim Mesajları</h2>
+            </div>
+            <a href="/Admin/Messages" class="btn-admin btn-admin-secondary btn-admin-sm">
+                <span>Tüm Mesajları Aç</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+        </div>
+        @if (ViewBag.RecentMessages != null && ((IEnumerable<dynamic>)ViewBag.RecentMessages).Any()) {
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Gönderen</th>
+                            <th>Konu</th>
+                            <th>Tarih</th>
+                            <th>Durum</th>
+                            <th style="text-align:right;">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var msg in ViewBag.RecentMessages) {
+                            <tr>
+                                <td class="td-user">
+                                    <div class="user-cell">
+                                        <span class="user-dot @(!msg.IsRead ? "user-dot-unread" : "")"></span>
+                                        <span class="user-fullname">@msg.FullName</span>
+                                    </div>
+                                </td>
+                                <td class="td-subject">@(msg.Subject ?? "(Konusuz Mesaj)")</td>
+                                <td class="td-date">@msg.SentAt.ToString("dd MMM yyyy HH:mm")</td>
+                                <td>
+                                    @if (!msg.IsRead) {
+                                        <span class="badge-admin badge-unread">Okunmadı</span>
+                                    } else {
+                                        <span class="badge-admin badge-inactive">Okundu</span>
+                                    }
+                                </td>
+                                <td style="text-align:right;">
+                                    <a href="/Admin/Messages/Detail/@msg.Id" class="btn-table-action" title="Detayı Görüntüle">
+                                        Oku &rarr;
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } else {
+            <div class="admin-card-body empty-state-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="empty-icon"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <p>Henüz gelen iletişim mesajı bulunmuyor.</p>
+            </div>
+        }
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="dashboard-side-col">
+        <div class="admin-card quick-actions-card">
+            <div class="admin-card-header">
+                <h3 class="admin-card-title">Hızlı İşlemler</h3>
+            </div>
+            <div class="quick-actions-list">
+                <a href="/Admin/Profile" class="quick-action-row">
+                    <div class="qa-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                    </div>
+                    <div class="qa-info">
+                        <div class="qa-title">Profil & Medya</div>
+                        <div class="qa-desc">Biyografi, logo, favicon ve CV güncelle</div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="qa-chevron"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+
+                <a href="/Admin/Projects/Create" class="quick-action-row">
+                    <div class="qa-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                    </div>
+                    <div class="qa-info">
+                        <div class="qa-title">Yeni Proje Ekle</div>
+                        <div class="qa-desc">Portföyünüze yeni bir çalışma ekleyin</div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="qa-chevron"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+
+                <a href="/Admin/Skills/Create" class="quick-action-row">
+                    <div class="qa-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    </div>
+                    <div class="qa-info">
+                        <div class="qa-title">Yetenek Ekle</div>
+                        <div class="qa-desc">Teknoloji veya araç yetkinliği kaydet</div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="qa-chevron"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+
+                <a href="/Admin/Experiences/Create" class="quick-action-row">
+                    <div class="qa-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    </div>
+                    <div class="qa-info">
+                        <div class="qa-title">İş Deneyimi Ekle</div>
+                        <div class="qa-desc">Kariyer geçmişinize yeni pozisyon ekleyin</div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="qa-chevron"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
+

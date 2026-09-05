@@ -115,6 +115,38 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Dynamic Favicon route for browser tab requests (/favicon.ico)
+app.MapGet("/favicon.ico", async (PortfolioSite.Interfaces.IPortfolioService portfolio, IWebHostEnvironment env) =>
+{
+    var profile = await portfolio.GetProfileAsync();
+    if (!string.IsNullOrEmpty(profile?.FaviconPath))
+    {
+        var physicalPath = Path.Combine(env.WebRootPath, profile.FaviconPath.TrimStart('/'));
+        if (File.Exists(physicalPath))
+        {
+            var ext = Path.GetExtension(physicalPath).ToLowerInvariant();
+            var mime = ext == ".png" ? "image/png" : ext == ".svg" ? "image/svg+xml" : ext == ".webp" ? "image/webp" : "image/x-icon";
+            return Results.File(physicalPath, mime);
+        }
+    }
+    
+    var name = profile?.FullName ?? "Muzaffer Atasoy";
+    var initials = "MA";
+    var parts = name.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    if (parts.Length == 1)
+        initials = parts[0].Length >= 2 ? parts[0][..2].ToUpper() : parts[0].ToUpper();
+    else if (parts.Length >= 2)
+        initials = $"{parts[0][0]}{parts[^1][0]}".ToUpper();
+
+    var fontSize = initials.Length > 2 ? "36" : "44";
+    var svg = $@"<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 100 100"">
+        <rect width=""100"" height=""100"" rx=""24"" fill=""#0F1115""/>
+        <rect width=""94"" height=""94"" x=""3"" y=""3"" rx=""22"" fill=""none"" stroke=""#178A90"" stroke-width=""4"" opacity=""0.4""/>
+        <text x=""50"" y=""55"" font-family=""-apple-system, BlinkMacSystemFont, sans-serif"" font-size=""{fontSize}"" font-weight=""800"" fill=""#178A90"" text-anchor=""middle"" dominant-baseline=""central"">{initials}</text>
+    </svg>";
+    return Results.Content(svg, "image/svg+xml");
+});
+
 app.MapRazorPages();
 
 app.Run();

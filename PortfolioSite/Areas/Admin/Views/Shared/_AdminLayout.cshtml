@@ -5,11 +5,19 @@
 @inject PortfolioSite.Data.ApplicationDbContext DbContext
 @{
     var profile = await PortfolioService.GetProfileAsync();
-    var fullName = profile?.FullName ?? "John Doe";
+    var fullName = profile?.FullName ?? "Muzaffer Atasoy";
     var unreadMessagesCount = await DbContext.ContactMessages.CountAsync(m => !m.IsRead && !m.IsDeleted);
     
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+
+    var initials = "MA";
+    if (!string.IsNullOrWhiteSpace(fullName)) {
+        var parts = fullName.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        initials = parts.Length > 1 ? $"{parts[0][0]}{parts[^1][0]}".ToUpper() : parts[0][..Math.Min(2, parts[0].Length)].ToUpper();
+    }
+    var defaultSvgIcon = $"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230F1115'/%3E%3Crect width='94' height='94' x='3' y='3' rx='22' fill='none' stroke='%23178A90' stroke-width='4' opacity='0.4'/%3E%3Ctext x='50' y='55' font-family='-apple-system,system-ui,sans-serif' font-size='44' font-weight='800' fill='%23178A90' text-anchor='middle' dominant-baseline='central'%3E{initials}%3C/text%3E%3C/svg%3E";
+    var faviconUrl = !string.IsNullOrEmpty(profile?.FaviconPath) ? profile.FaviconPath : defaultSvgIcon;
 }
 <!DOCTYPE html>
 <html lang="tr">
@@ -17,192 +25,47 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>@(ViewData["Title"] != null ? ViewData["Title"] + " — " : "")Admin Panel | @fullName</title>
-    @if (!string.IsNullOrEmpty(profile?.FaviconPath)) {
-        <link rel="icon" href="@profile.FaviconPath" asp-append-version="true" />
-    } else {
-        <script>
-            (function() {
-                var name = "@fullName".trim() || "MA";
-                var parts = name.split(/\s+/).filter(Boolean);
-                var initials = "MA";
-                if (parts.length === 1) {
-                    initials = parts[0].length >= 2 ? parts[0].substring(0, 2).toUpperCase() : parts[0].toUpperCase();
-                } else if (parts.length >= 2) {
-                    initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-                }
-                var fontSize = initials.length > 2 ? "36" : "44";
-                var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="%230F1115"/><rect width="94" height="94" x="3" y="3" rx="22" fill="none" stroke="%23178A90" stroke-width="4" opacity="0.4"/><text x="50" y="55" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="' + fontSize + '" font-weight="800" fill="%23178A90" text-anchor="middle" dominant-baseline="central">' + initials + '</text></svg>';
-                var link = document.createElement('link');
-                link.rel = 'icon';
-                link.type = 'image/svg+xml';
-                link.href = 'data:image/svg+xml,' + svg;
-                document.head.appendChild(link);
-            })();
-        </script>
-    }
+    <title>@(ViewData["Title"] != null ? ViewData["Title"] + " — " : "")Yönetim Paneli | @fullName</title>
+    
+    <link rel="icon" type="image/x-icon" href="@faviconUrl" asp-append-version="true" />
+    <link rel="icon" type="image/svg+xml" href="@faviconUrl" asp-append-version="true" />
+    <link rel="shortcut icon" href="@faviconUrl" asp-append-version="true" />
+    
     <link rel="stylesheet" href="/css/admin.css" asp-append-version="true" />
 </head>
-<body>
+<body class="admin-body">
 
-<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;" onclick="document.querySelector('.admin-sidebar').classList.remove('open');this.style.display='none';"></div>
-
-<div class="admin-layout">
-    <!-- SIDEBAR -->
-    <aside class="admin-sidebar" role="navigation" aria-label="Admin menü">
-        <div class="sidebar-header">
-            <div class="sidebar-brand-card">
-                <div class="brand-avatar-box">
-                    @if (!string.IsNullOrEmpty(profile?.LogoPath)) {
-                        <img src="@profile.LogoPath" alt="@fullName" class="brand-logo-img" />
-                    } else if (!string.IsNullOrEmpty(profile?.ProfileImagePath)) {
-                        <img src="@profile.ProfileImagePath" alt="@fullName" class="brand-avatar-img" />
-                    } else {
-                        <div class="brand-monogram">
-                            @{
-                                var initial = "MA";
-                                if (!string.IsNullOrWhiteSpace(fullName)) {
-                                    var p = fullName.Trim().Split(' ');
-                                    initial = p.Length > 1 ? $"{p[0][0]}{p[^1][0]}".ToUpper() : p[0][..Math.Min(2, p[0].Length)].ToUpper();
-                                }
-                            }
-                            @initial
-                        </div>
-                    }
-                </div>
-                <div class="brand-info">
-                    <div class="brand-name" title="@fullName">@fullName</div>
-                    <div class="brand-status">
-                        <span class="status-pulse-dot"></span>
-                        <span>Yönetici Paneli</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <div class="nav-section">
-                <div class="nav-section-title">Genel Bakış</div>
-                <a href="/Admin/Dashboard" class="nav-item @(currentController == "Dashboard" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-                    </span>
-                    <span class="nav-item-text">Dashboard</span>
-                </a>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">İçerik Yönetimi</div>
-                <a href="/Admin/Profile" class="nav-item @(currentController == "Profile" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
-                    </span>
-                    <span class="nav-item-text">Profil & Bilgiler</span>
-                </a>
-                <a href="/Admin/Experiences" class="nav-item @(currentController == "Experiences" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    </span>
-                    <span class="nav-item-text">Deneyimler</span>
-                </a>
-                <a href="/Admin/Educations" class="nav-item @(currentController == "Educations" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                    </span>
-                    <span class="nav-item-text">Eğitim Bilgileri</span>
-                </a>
-                <a href="/Admin/Skills" class="nav-item @(currentController == "Skills" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                    </span>
-                    <span class="nav-item-text">Yetenekler</span>
-                </a>
-                <a href="/Admin/Projects" class="nav-item @(currentController == "Projects" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-                    </span>
-                    <span class="nav-item-text">Projeler</span>
-                </a>
-                <a href="/Admin/Certificates" class="nav-item @(currentController == "Certificates" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
-                    </span>
-                    <span class="nav-item-text">Sertifikalar</span>
-                </a>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">İletişim & Sistem</div>
-                <a href="/Admin/Messages" class="nav-item @(currentController == "Messages" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    </span>
-                    <span class="nav-item-text">Gelen Mesajlar</span>
-                    @if (unreadMessagesCount > 0) {
-                        <span class="nav-badge">@unreadMessagesCount</span>
-                    }
-                </a>
-                <a href="/Admin/Account/ChangeCredentials" class="nav-item @(currentController == "Account" ? "active" : "")">
-                    <span class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                    </span>
-                    <span class="nav-item-text">Güvenlik & Şifre</span>
-                </a>
-            </div>
-        </nav>
-
-        <div class="sidebar-user-footer">
-            <div class="sidebar-user-card">
-                <div class="user-avatar-mini">
-                    @if (!string.IsNullOrEmpty(profile?.ProfileImagePath)) {
-                        <img src="@profile.ProfileImagePath" alt="@fullName" />
-                    } else {
-                        <span>A</span>
-                    }
-                </div>
-                <div class="user-details">
-                    <div class="user-display-name">@(User.Identity?.Name?.Split('@')[0] ?? "Admin")</div>
-                    <div class="user-role-label">Sistem Yöneticisi</div>
-                </div>
-            </div>
-            <div class="sidebar-actions-grid">
-                <a href="/" target="_blank" class="sidebar-action-btn" title="Canlı Siteyi Aç">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-                    <span>Siteyi Gör</span>
-                </a>
-                <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post" class="sidebar-logout-form">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="sidebar-action-btn sidebar-logout-btn" title="Oturumu Kapat">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                        <span>Çıkış</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </aside>
-
-    <!-- MAIN -->
-    <div class="admin-main">
-        <header class="admin-topbar">
+<div class="admin-shell">
+    <!-- TOP EXECUTIVE HEADER -->
+    <header class="admin-topbar">
+        <div class="admin-container topbar-inner">
+            <!-- Brand / Logo Area -->
             <div class="topbar-left">
-                <button class="admin-hamburger" aria-label="Menüyü aç">
-                    <span></span><span></span><span></span>
-                </button>
-                <nav class="breadcrumb" aria-label="Breadcrumb">
-                    <a href="/Admin/Dashboard" class="breadcrumb-home">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                        <span>Yönetim</span>
-                    </a>
-                    @if (ViewData["Title"] != null && ViewData["Title"]?.ToString() != "Dashboard") {
-                        <span class="breadcrumb-sep">/</span>
-                        <span class="breadcrumb-current">@ViewData["Title"]</span>
-                    }
-                </nav>
+                <a href="/Admin/Dashboard" class="admin-brand-card" title="Dashboard">
+                    <div class="brand-avatar-box">
+                        @if (!string.IsNullOrEmpty(profile?.LogoPath)) {
+                            <img src="@profile.LogoPath" alt="@fullName" class="brand-logo-img" />
+                        } else if (!string.IsNullOrEmpty(profile?.ProfileImagePath)) {
+                            <img src="@profile.ProfileImagePath" alt="@fullName" class="brand-avatar-img" />
+                        } else {
+                            <div class="brand-monogram">@initials</div>
+                        }
+                    </div>
+                    <div class="brand-info">
+                        <div class="brand-name">@fullName</div>
+                        <div class="brand-status">
+                            <span class="status-pulse-dot"></span>
+                            <span>Yönetici Paneli</span>
+                        </div>
+                    </div>
+                </a>
             </div>
+
+            <!-- Header Actions -->
             <div class="topbar-right">
-                <div class="system-status-indicator" title="Yönetim Paneli Aktif">
+                <div class="system-status-indicator" title="Sistem Aktif ve Çalışır Durumda">
                     <span class="live-dot"></span>
-                    <span class="status-label">Canlı</span>
+                    <span class="status-label">Canlı Sistem</span>
                 </div>
 
                 <a href="/Admin/Messages" class="topbar-icon-link @(unreadMessagesCount > 0 ? "has-unread" : "")" title="Gelen Mesajlar">
@@ -212,33 +75,124 @@
                     }
                 </a>
 
-                <a href="/" target="_blank" class="topbar-site-btn">
+                <a href="/" target="_blank" class="topbar-site-btn" title="Kişisel Sitenizi Aç">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
                     <span>Siteyi Gör</span>
                 </a>
-            </div>
-        </header>
 
-        <main class="admin-content">
+                <div class="topbar-user-area">
+                    <div class="user-meta">
+                        <span class="user-name">@(User.Identity?.Name?.Split('@')[0] ?? "Admin")</span>
+                    </div>
+                    <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post" class="topbar-logout-form">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="topbar-logout-btn" title="Oturumu Güvenle Kapat">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                            <span>Çıkış</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Mobile Navigation Toggle Button -->
+                <button class="admin-mobile-toggle" aria-label="Menüyü Aç/Kapat" id="adminMenuToggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HORIZONTAL SEGMENTED NAVIGATION BAR -->
+    <nav class="admin-nav-bar" aria-label="Ana Menü" id="adminNavContainer">
+        <div class="admin-container nav-bar-inner">
+            <div class="nav-tabs-group">
+                <a href="/Admin/Dashboard" class="nav-tab @(currentController == "Dashboard" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/Admin/Profile" class="nav-tab @(currentController == "Profile" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                    <span>Profil & Bilgiler</span>
+                </a>
+                <a href="/Admin/Experiences" class="nav-tab @(currentController == "Experiences" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>Deneyimler</span>
+                </a>
+                <a href="/Admin/Educations" class="nav-tab @(currentController == "Educations" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span>Eğitim</span>
+                </a>
+                <a href="/Admin/Skills" class="nav-tab @(currentController == "Skills" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    <span>Yetenekler</span>
+                </a>
+                <a href="/Admin/Projects" class="nav-tab @(currentController == "Projects" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                    <span>Projeler</span>
+                </a>
+                <a href="/Admin/Certificates" class="nav-tab @(currentController == "Certificates" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                    <span>Sertifikalar</span>
+                </a>
+                <a href="/Admin/Messages" class="nav-tab @(currentController == "Messages" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    <span>Mesajlar</span>
+                    @if (unreadMessagesCount > 0) {
+                        <span class="nav-tab-badge">@unreadMessagesCount</span>
+                    }
+                </a>
+                <a href="/Admin/Account/ChangeCredentials" class="nav-tab @(currentController == "Account" ? "active" : "")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span>Güvenlik</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CENTERED MAIN CONTENT CONTAINER -->
+    <main class="admin-main">
+        <div class="admin-container main-content-box">
             @if (TempData["Success"] != null) {
                 <div class="alert alert-success">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                    @TempData["Success"]
+                    <span>@TempData["Success"]</span>
                 </div>
             }
             @if (TempData["Error"] != null) {
                 <div class="alert alert-error">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg>
-                    @TempData["Error"]
+                    <span>@TempData["Error"]</span>
                 </div>
             }
             @RenderBody()
-        </main>
-    </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="admin-footer">
+        <div class="admin-container footer-inner">
+            <div class="footer-left">
+                <span>&copy; @DateTime.UtcNow.Year <strong>@fullName</strong> &mdash; Kişisel Portföy Yönetim Konsolu</span>
+            </div>
+            <div class="footer-right">
+                <span class="footer-badge">.NET 8 &bull; ASP.NET Core MVC &bull; SQL Server</span>
+            </div>
+        </div>
+    </footer>
 </div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/admin.js" asp-append-version="true"></script>
+<script>
+    // Responsive mobile menu toggle
+    const toggleBtn = document.getElementById('adminMenuToggle');
+    const navContainer = document.getElementById('adminNavContainer');
+    if (toggleBtn && navContainer) {
+        toggleBtn.addEventListener('click', function () {
+            navContainer.classList.toggle('nav-open');
+            toggleBtn.classList.toggle('active');
+        });
+    }
+</script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
