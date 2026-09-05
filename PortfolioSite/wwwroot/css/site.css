@@ -19,14 +19,14 @@
     --border-line: rgba(255, 255, 255, 0.08);
     --border-subtle: rgba(255, 255, 255, 0.04);
     
-    --accent-teal: #3F7C78;
-    --accent-teal-hover: #56938E;
-    --accent-teal-subtle: rgba(63, 124, 120, 0.12);
+    --accent-teal: #178A90;
+    --accent-teal-hover: #1E9EA5;
+    --accent-teal-subtle: rgba(23, 138, 144, 0.14);
     
-    --accent-blue: #3F7C78;
-    --accent-blue-light: #56938E;
-    --accent-blue-hover: #326663;
-    --accent-green: #3F7C78;
+    --accent-blue: #178A90;
+    --accent-blue-light: #38B2B8;
+    --accent-blue-hover: #127277;
+    --accent-green: #178A90;
     
     --radius-sm: 5px;
     --radius-md: 8px;
@@ -51,14 +51,14 @@
     --border-line: rgba(15, 23, 42, 0.08);
     --border-subtle: rgba(15, 23, 42, 0.04);
     
-    --accent-teal: #2D6A65;
-    --accent-teal-hover: #3F7C78;
-    --accent-teal-subtle: rgba(45, 106, 101, 0.1);
+    --accent-teal: #0F766E;
+    --accent-teal-hover: #138E85;
+    --accent-teal-subtle: rgba(15, 118, 110, 0.12);
     
-    --accent-blue: #2D6A65;
-    --accent-blue-light: #3F7C78;
-    --accent-blue-hover: #22524E;
-    --accent-green: #2D6A65;
+    --accent-blue: #0F766E;
+    --accent-blue-light: #138E85;
+    --accent-blue-hover: #0B5C56;
+    --accent-green: #0F766E;
 }
 
 /* Hide Google Translate Banner & Element Cleanly */
@@ -437,21 +437,22 @@ header {
 .btn-primary {
     background-color: var(--accent-teal);
     color: #ffffff;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.875rem;
-    padding: 0.65rem 1.35rem;
+    padding: 0.68rem 1.4rem;
     border-radius: var(--radius-sm);
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
     border: 1px solid var(--accent-teal);
-    box-shadow: none;
-    transition: background-color 0.18s ease, border-color 0.18s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .btn-primary:hover {
     background-color: var(--accent-teal-hover);
     border-color: var(--accent-teal-hover);
+    box-shadow: 0 2px 8px rgba(23, 138, 144, 0.25);
 }
 
 .btn-secondary {
