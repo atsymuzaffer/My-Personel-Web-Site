@@ -23,14 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== ACTIVE NAV ITEM =====
-  const currentPath = window.location.pathname.toLowerCase();
-  document.querySelectorAll('.nav-item').forEach(item => {
-    const href = item.getAttribute('href');
-    if (href && currentPath.includes(href.toLowerCase().split('/').pop())) {
-      item.classList.add('active');
-    }
-  });
+  // ===== ACTIVE NAV ITEM (Fallback if not set by server) =====
+  if (!document.querySelector('.nav-item.active')) {
+    const currentPath = window.location.pathname.toLowerCase();
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const href = item.getAttribute('href');
+      if (href && href.length > 1 && (currentPath === href.toLowerCase() || currentPath.startsWith(href.toLowerCase() + '/'))) {
+        item.classList.add('active');
+      }
+    });
+  }
 
   // ===== DELETE CONFIRM MODAL =====
   document.querySelectorAll('[data-confirm-delete]').forEach(btn => {
