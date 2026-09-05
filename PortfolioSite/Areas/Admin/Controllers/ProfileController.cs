@@ -28,7 +28,7 @@ public class ProfileController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Index(SiteProfile model, IFormFile? profileImage, IFormFile? cvFile, CancellationToken ct)
+    public async Task<IActionResult> Index(SiteProfile model, IFormFile? profileImage, IFormFile? cvFile, IFormFile? faviconFile, IFormFile? logoFile, CancellationToken ct)
     {
         var profile = await _db.SiteProfiles.FirstOrDefaultAsync(ct);
         if (profile == null) { TempData["Error"] = "Profil bulunamadı."; return RedirectToAction(nameof(Index)); }
@@ -79,6 +79,26 @@ public class ProfileController : Controller
             else { TempData["Error"] = pdfError; return View(profile); }
         }
 
+        if (faviconFile != null && faviconFile.Length > 0)
+        {
+            if (_files.ValidateFaviconFile(faviconFile, out var favError))
+            {
+                await _files.DeleteFileAsync(profile.FaviconPath);
+                profile.FaviconPath = await _files.SaveFileAsync(faviconFile, "branding", [".ico", ".png", ".svg", ".webp"], ct);
+            }
+            else { TempData["Error"] = favError; return View(profile); }
+        }
+
+        if (logoFile != null && logoFile.Length > 0)
+        {
+            if (_files.ValidateLogoFile(logoFile, out var logoError))
+            {
+                await _files.DeleteFileAsync(profile.LogoPath);
+                profile.LogoPath = await _files.SaveFileAsync(logoFile, "branding", [".png", ".svg", ".jpg", ".jpeg", ".webp"], ct);
+            }
+            else { TempData["Error"] = logoError; return View(profile); }
+        }
+
         await _db.SaveChangesAsync(ct);
         TempData["Success"] = "Profil başarıyla güncellendi!";
         return RedirectToAction(nameof(Index));
@@ -112,6 +132,38 @@ public class ProfileController : Controller
             profile.UpdatedAt = DateTime.UtcNow;
             await _db.SaveChangesAsync(ct);
             TempData["Success"] = "Profil fotoğrafı başarıyla silindi!";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteFavicon(CancellationToken ct)
+    {
+        var profile = await _db.SiteProfiles.FirstOrDefaultAsync(ct);
+        if (profile != null && !string.IsNullOrEmpty(profile.FaviconPath))
+        {
+            await _files.DeleteFileAsync(profile.FaviconPath);
+            profile.FaviconPath = null;
+            profile.UpdatedAt = DateTime.UtcNow;
+            await _db.SaveChangesAsync(ct);
+            TempData["Success"] = "Favicon başarıyla silindi! Otomatik oluşturulan ikona dönüldü.";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteLogo(CancellationToken ct)
+    {
+        var profile = await _db.SiteProfiles.FirstOrDefaultAsync(ct);
+        if (profile != null && !string.IsNullOrEmpty(profile.LogoPath))
+        {
+            await _files.DeleteFileAsync(profile.LogoPath);
+            profile.LogoPath = null;
+            profile.UpdatedAt = DateTime.UtcNow;
+            await _db.SaveChangesAsync(ct);
+            TempData["Success"] = "Logo başarıyla silindi! İsim ve soyisim metnine dönüldü.";
         }
         return RedirectToAction(nameof(Index));
     }

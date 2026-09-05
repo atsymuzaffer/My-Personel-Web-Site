@@ -119,6 +119,25 @@ public class HomeController : Controller
     public async Task<IActionResult> Favicon(CancellationToken ct)
     {
         var profile = await _portfolio.GetProfileAsync(ct);
+        if (!string.IsNullOrEmpty(profile?.FaviconPath))
+        {
+            var fullPath = Path.Combine(_env.WebRootPath, profile.FaviconPath.TrimStart('/'));
+            if (System.IO.File.Exists(fullPath))
+            {
+                var ext = Path.GetExtension(fullPath).ToLowerInvariant();
+                var mime = ext switch
+                {
+                    ".ico" => "image/x-icon",
+                    ".png" => "image/png",
+                    ".svg" => "image/svg+xml",
+                    ".webp" => "image/webp",
+                    _ => "image/x-icon"
+                };
+                var bytes = await System.IO.File.ReadAllBytesAsync(fullPath, ct);
+                return File(bytes, mime);
+            }
+        }
+
         var name = profile?.FullName?.Trim() ?? "MA";
         
         string initials = "MA";
@@ -140,9 +159,9 @@ public class HomeController : Controller
         var fontSize = initials.Length > 2 ? "36" : "44";
 
         var svg = $@"<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 100 100"">
-  <rect width=""100"" height=""100"" rx=""24"" fill=""#0B0D10""/>
-  <rect width=""94"" height=""94"" x=""3"" y=""3"" rx=""22"" fill=""none"" stroke=""#397BFF"" stroke-width=""4"" opacity=""0.4""/>
-  <text x=""50"" y=""55"" font-family=""-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"" font-size=""{fontSize}"" font-weight=""800"" fill=""#397BFF"" text-anchor=""middle"" dominant-baseline=""central"">{initials}</text>
+  <rect width=""100"" height=""100"" rx=""24"" fill=""#0F1115""/>
+  <rect width=""94"" height=""94"" x=""3"" y=""3"" rx=""22"" fill=""none"" stroke=""#178A90"" stroke-width=""4"" opacity=""0.4""/>
+  <text x=""50"" y=""55"" font-family=""-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"" font-size=""{fontSize}"" font-weight=""800"" fill=""#178A90"" text-anchor=""middle"" dominant-baseline=""central"">{initials}</text>
 </svg>";
 
         return Content(svg, "image/svg+xml", System.Text.Encoding.UTF8);

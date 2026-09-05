@@ -87,4 +87,24 @@ public class LocalFileStorageService : IFileStorageService
         if (!file.ContentType.Equals("application/pdf", StringComparison.OrdinalIgnoreCase)) { error = "Geçersiz dosya türü."; return false; }
         return true;
     }
+
+    public bool ValidateFaviconFile(IFormFile file, out string? error)
+    {
+        error = null;
+        if (file.Length > 2 * 1024 * 1024) { error = "Favicon dosyası 2MB'dan büyük olamaz."; return false; }
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+        string[] allowed = [".ico", ".png", ".svg", ".webp"];
+        if (!allowed.Contains(ext)) { error = "Favicon için yalnızca ICO, PNG, SVG veya WebP dosyaları kabul edilir."; return false; }
+        return true;
+    }
+
+    public bool ValidateLogoFile(IFormFile file, out string? error)
+    {
+        error = null;
+        if (file.Length > MaxImageSizeBytes) { error = "Logo dosyası 5MB'dan büyük olamaz."; return false; }
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+        string[] allowed = [".png", ".svg", ".jpg", ".jpeg", ".webp"];
+        if (!allowed.Contains(ext)) { error = "Logo için yalnızca PNG, SVG, JPG veya WebP dosyaları kabul edilir."; return false; }
+        return true;
+    }
 }

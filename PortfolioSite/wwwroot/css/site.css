@@ -227,6 +227,13 @@ header {
     display: inline-block;
 }
 
+.nav-logo {
+    max-height: 34px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
 .nav-links {
     display: flex;
     align-items: center;

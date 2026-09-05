@@ -7,4 +7,6 @@ public interface IFileStorageService
     Task DeleteFileAsync(string? relativePath);
     bool ValidateImageFile(IFormFile file, out string? error);
     bool ValidatePdfFile(IFormFile file, out string? error);
+    bool ValidateFaviconFile(IFormFile file, out string? error);
+    bool ValidateLogoFile(IFormFile file, out string? error);
 }

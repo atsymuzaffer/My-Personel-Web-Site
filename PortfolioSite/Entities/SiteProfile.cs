@@ -35,6 +35,12 @@ public class SiteProfile : BaseEntity
     [MaxLength(500)]
     public string? CvFilePath { get; set; }
     
+    [MaxLength(500)]
+    public string? FaviconPath { get; set; }
+    
+    [MaxLength(500)]
+    public string? LogoPath { get; set; }
+    
     public int CvDownloadCount { get; set; } = 0;
     
     [MaxLength(200)]
